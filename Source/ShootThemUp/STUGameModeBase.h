@@ -7,14 +7,13 @@
 #include "STUGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SHOOTTHEMUP_API ASTUGameModeBase : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
-	
+  protected:
+    virtual void BeginPlay() override;
 };
