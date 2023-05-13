@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+
 #include "STUGameModeBase.generated.h"
 
 /**
@@ -14,6 +15,8 @@ class SHOOTTHEMUP_API ASTUGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
 
-  protected:
+public:
+    ASTUGameModeBase();
+protected:
     virtual void BeginPlay() override;
 };
