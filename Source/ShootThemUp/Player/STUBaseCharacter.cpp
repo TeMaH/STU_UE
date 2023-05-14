@@ -1,32 +1,63 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Player/STUBaseCharacter.h"
+#include "STUBaseCharacter.h"
+
 #include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
-// Sets default values
-ASTUBaseCharacter::ASTUBaseCharacter()
+ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
+    : Super(ObjectInitializer)
 {
-    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need
-    // it.
     PrimaryActorTick.bCanEverTick = true;
+    SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
+    SpringArmComponent->SetupAttachment(GetRootComponent());
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-    CameraComponent->SetupAttachment(GetRootComponent());
+    CameraComponent->SetupAttachment(SpringArmComponent);
+
+    TurnAxisName = TEXT("Turn");
+    LookUpAxisName = TEXT("LookUp");
+    MoveForwardAxisName = TEXT("MoveForward");
+    MoveRightAxisName = TEXT("MoveRight");
 }
 
-// Called when the game starts or when spawned
+
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
 }
 
-// Called every frame
+void ASTUBaseCharacter::Turn(IN float InValue)
+{
+    AddControllerYawInput(InValue * MouseSensitivityScale_Yaw);
+}
+
+void ASTUBaseCharacter::LookUp(IN float InValue)
+{
+    AddControllerPitchInput(InValue * MouseSensitivityScale_Pitch);
+}
+
+void ASTUBaseCharacter::MoveRight(IN float InValue)
+{
+    AddMovementInput(GetActorRightVector(), InValue);
+    InputValue.Y = InValue;
+}
+
+void ASTUBaseCharacter::MoveForward(IN float InValue)
+{
+    AddMovementInput(GetActorForwardVector(), InValue);
+    InputValue.X = InValue;
+}
+
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 }
 
-// Called to bind functionality to input
-void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
+void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    PlayerInputComponent->BindAxis(TurnAxisName, this, &ASTUBaseCharacter::Turn);
+    PlayerInputComponent->BindAxis(LookUpAxisName, this, &ASTUBaseCharacter::LookUp);
+    PlayerInputComponent->BindAxis(MoveForwardAxisName, this, &ASTUBaseCharacter::MoveForward);
+    PlayerInputComponent->BindAxis(MoveRightAxisName, this, &ASTUBaseCharacter::MoveRight);
 }
