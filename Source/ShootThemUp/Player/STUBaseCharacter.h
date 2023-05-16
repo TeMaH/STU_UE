@@ -39,6 +39,9 @@ protected:
     FName MoveRightAxisName = "";
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+    FName JumpName = "";
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
     float MouseSensitivityScale_Pitch = 1.f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")

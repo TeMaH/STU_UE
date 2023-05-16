@@ -17,6 +17,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
     LookUpAxisName = TEXT("LookUp");
     MoveForwardAxisName = TEXT("MoveForward");
     MoveRightAxisName = TEXT("MoveRight");
+    JumpName = TEXT("Jump");
 }
 
 
@@ -60,4 +61,5 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAxis(LookUpAxisName, this, &ASTUBaseCharacter::LookUp);
     PlayerInputComponent->BindAxis(MoveForwardAxisName, this, &ASTUBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis(MoveRightAxisName, this, &ASTUBaseCharacter::MoveRight);
+    PlayerInputComponent->BindAction(JumpName, IE_Pressed, this, &ASTUBaseCharacter::Jump);
 }
