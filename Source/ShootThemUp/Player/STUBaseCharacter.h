@@ -42,6 +42,9 @@ protected:
     FName JumpName = "";
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+    FName SprintName = "";
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
     float MouseSensitivityScale_Pitch = 1.f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
@@ -50,13 +53,20 @@ protected:
     UPROPERTY(BlueprintReadOnly, Category = "Input")
     FVector2D InputValue = FVector2D::ZeroVector;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Input")
+    bool IsSprint = false;
+
+    UPROPERTY(BlueprintReadOnly, Category = "Movement")
+    float SprintSpeed = 900.0f;
+
 protected:
     virtual void BeginPlay() override;
     virtual void Turn(IN float InValue);
     virtual void LookUp(IN float InValue);
     virtual void MoveRight(IN float InValue);
     virtual void MoveForward(IN float InValue);
-
+    virtual void SprintStarted();
+    virtual void SprintEnded();
 
 public:
     virtual void Tick(float DeltaTime) override;

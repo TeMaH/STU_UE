@@ -2,6 +2,7 @@
 #include "STUBaseCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
@@ -18,6 +19,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
     MoveForwardAxisName = TEXT("MoveForward");
     MoveRightAxisName = TEXT("MoveRight");
     JumpName = TEXT("Jump");
+    SprintName = TEXT("Sprint");
 }
 
 
@@ -48,6 +50,18 @@ void ASTUBaseCharacter::MoveForward(IN float InValue)
     InputValue.X = InValue;
 }
 
+void ASTUBaseCharacter::SprintStarted()
+{
+    IsSprint = true;
+    GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+}
+
+void ASTUBaseCharacter::SprintEnded()
+{
+    IsSprint = false;
+    GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+}
+
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
@@ -62,4 +76,6 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAxis(MoveForwardAxisName, this, &ASTUBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis(MoveRightAxisName, this, &ASTUBaseCharacter::MoveRight);
     PlayerInputComponent->BindAction(JumpName, IE_Pressed, this, &ASTUBaseCharacter::Jump);
+    PlayerInputComponent->BindAction(SprintName, IE_Pressed, this, &ASTUBaseCharacter::SprintStarted);
+    PlayerInputComponent->BindAction(SprintName, IE_Released, this, &ASTUBaseCharacter::SprintEnded);
 }
