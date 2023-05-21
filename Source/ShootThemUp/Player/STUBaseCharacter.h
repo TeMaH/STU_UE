@@ -50,14 +50,7 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
     float MouseSensitivityScale_Yaw = 1.f;
 
-    UPROPERTY(BlueprintReadOnly, Category = "Input")
-    FVector2D InputValue = FVector2D::ZeroVector;
-
-    UPROPERTY(BlueprintReadOnly, Category = "Input")
     bool IsSprint = false;
-
-    UPROPERTY(BlueprintReadOnly, Category = "Movement")
-    float SprintSpeed = 900.0f;
 
 protected:
     virtual void BeginPlay() override;
@@ -72,4 +65,10 @@ public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    UFUNCTION(BlueprintCallable)
+    bool IsSprintMovement() const;
+
+    UFUNCTION(BlueprintCallable)
+    float GetRotation() const;
 };

@@ -1,12 +1,13 @@
-
 #include "STUBaseCharacter.h"
 
-#include "Camera/CameraComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Animation/STUMovementComponent.h"
+
+#include <Camera/CameraComponent.h>
+#include <GameFramework/CharacterMovementComponent.h>
+#include <GameFramework/SpringArmComponent.h>
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
-    : Super(ObjectInitializer)
+    : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
     PrimaryActorTick.bCanEverTick = true;
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
@@ -41,25 +42,21 @@ void ASTUBaseCharacter::LookUp(IN float InValue)
 void ASTUBaseCharacter::MoveRight(IN float InValue)
 {
     AddMovementInput(GetActorRightVector(), InValue);
-    InputValue.Y = InValue;
 }
 
 void ASTUBaseCharacter::MoveForward(IN float InValue)
 {
     AddMovementInput(GetActorForwardVector(), InValue);
-    InputValue.X = InValue;
 }
 
 void ASTUBaseCharacter::SprintStarted()
 {
     IsSprint = true;
-    GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
 }
 
 void ASTUBaseCharacter::SprintEnded()
 {
     IsSprint = false;
-    GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
@@ -78,4 +75,24 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction(JumpName, IE_Pressed, this, &ASTUBaseCharacter::Jump);
     PlayerInputComponent->BindAction(SprintName, IE_Pressed, this, &ASTUBaseCharacter::SprintStarted);
     PlayerInputComponent->BindAction(SprintName, IE_Released, this, &ASTUBaseCharacter::SprintEnded);
+}
+
+bool ASTUBaseCharacter::IsSprintMovement() const
+{
+    return !GetVelocity().IsNearlyZero() && IsSprint;
+}
+
+float ASTUBaseCharacter::GetRotation() const
+{
+    const FVector Velocity = GetVelocity();
+    if (Velocity.IsNearlyZero())
+    {
+        return 0.0f;
+    }
+    const FVector Forward = GetActorForwardVector();
+
+    const float Dot = FVector::DotProduct(Forward, Velocity.GetSafeNormal2D());
+    const FVector Cross = FVector::CrossProduct(Forward, Velocity.GetSafeNormal2D());
+    const float Angle = FMath::RadiansToDegrees(FMath::Acos(Dot));
+    return Cross.Z < 0.0f ? -Angle : Angle;
 }
