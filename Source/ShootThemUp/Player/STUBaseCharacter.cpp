@@ -1,10 +1,12 @@
 #include "STUBaseCharacter.h"
 
-#include "Animation/STUMovementComponent.h"
-
 #include <Camera/CameraComponent.h>
 #include <GameFramework/CharacterMovementComponent.h>
+#include <Components/TextRenderComponent.h>
 #include <GameFramework/SpringArmComponent.h>
+
+#include "Components/STUMovementComponent.h"
+#include "Components/STUHealthComponent.h"
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
     : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -14,6 +16,10 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
     SpringArmComponent->SetupAttachment(GetRootComponent());
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
+    TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthRender");
+    TextRenderComponent->SetupAttachment(GetRootComponent());
+
+    HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 
     TurnAxisName = TEXT("Turn");
     LookUpAxisName = TEXT("LookUp");
@@ -62,6 +68,8 @@ void ASTUBaseCharacter::SprintEnded()
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    const auto Health = HealthComponent->GetHealth();
+    TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), Health)));
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
