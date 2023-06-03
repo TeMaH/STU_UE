@@ -1,4 +1,8 @@
-#include "Components/STUHealthComponent.h"
+#include "STUHealthComponent.h"
+
+#include "Actors/IceDamageType.h"
+#include "Actors/FireDamageType.h"
+#include <Kismet/KismetSystemLibrary.h>
 
 USTUHealthComponent::USTUHealthComponent()
 {
@@ -15,6 +19,14 @@ void USTUHealthComponent::BeginPlay()
 
 void USTUHealthComponent::OnTakeAnyDamageCallback(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+    if(DamageType->IsA<UIceDamageType>())
+    {
+        UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Cold"), true, false, FLinearColor::Blue);
+    }
+    else if (DamageType->IsA<UFireDamageType>())
+    {
+        UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hot"), true, false, FLinearColor::Red); 
+    }
     Health = FMath::Max(0.0f, Health - Damage);
 }
 
