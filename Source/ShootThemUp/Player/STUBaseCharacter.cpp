@@ -73,6 +73,10 @@ void ASTUBaseCharacter::OnDeath()
     PlayAnimMontage(DeathMontage);
     GetCharacterMovement()->DisableMovement();
     SetLifeSpan(5.0f);
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
 }
 
 void ASTUBaseCharacter::OnHealthChnaged(const float InHealth, const float InMaxHealth)
