@@ -5,6 +5,7 @@
 
 #include "STUHealthComponent.generated.h"
 
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent
 {
@@ -19,9 +20,18 @@ public:
     UFUNCTION(BlueprintCallable)
     float GetMaxHealth() const;
 
+    UFUNCTION(BlueprintCallable)
+    bool IsDeath() const;
+
     UFUNCTION()
     void OnTakeAnyDamageCallback(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
         class AController* InstigatedBy, AActor* DamageCauser);
+
+    DECLARE_MULTICAST_DELEGATE(FOnDeath);
+    FOnDeath OnDeath;
+
+    DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, const float, const float);
+    FOnHealthChanged OnHealthChanged;
 
 protected:
     virtual void BeginPlay() override;

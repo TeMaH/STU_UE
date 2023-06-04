@@ -58,6 +58,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
     float MouseSensitivityScale_Yaw = 1.f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+    UAnimMontage* DeathMontage = nullptr;
+
     bool IsSprint = false;
 
 protected:
@@ -68,6 +71,10 @@ protected:
     virtual void MoveForward(IN float InValue);
     virtual void SprintStarted();
     virtual void SprintEnded();
+
+    void OnDeath();
+    void OnHealthChnaged(const float InHealth, const float InMaxHealth);
+    void UpdateHealthText(const float InHealth);
 
 public:
     virtual void Tick(float DeltaTime) override;

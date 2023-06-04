@@ -33,6 +33,9 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    HealthComponent->OnDeath.AddUObject(this, &ThisClass::OnDeath);
+    HealthComponent->OnHealthChanged.AddUObject(this, &ThisClass::OnHealthChnaged);
+    UpdateHealthText(HealthComponent->GetHealth());
 }
 
 void ASTUBaseCharacter::Turn(IN float InValue)
@@ -65,11 +68,26 @@ void ASTUBaseCharacter::SprintEnded()
     IsSprint = false;
 }
 
+void ASTUBaseCharacter::OnDeath()
+{
+    PlayAnimMontage(DeathMontage);
+    GetCharacterMovement()->DisableMovement();
+    SetLifeSpan(5.0f);
+}
+
+void ASTUBaseCharacter::OnHealthChnaged(const float InHealth, const float InMaxHealth)
+{
+    UpdateHealthText(InHealth);
+}
+
+void ASTUBaseCharacter::UpdateHealthText(const float InHealth)
+{
+    TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), InHealth)));
+}
+
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    const auto Health = HealthComponent->GetHealth();
-    TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), Health)));
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

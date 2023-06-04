@@ -19,15 +19,16 @@ void USTUHealthComponent::BeginPlay()
 
 void USTUHealthComponent::OnTakeAnyDamageCallback(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-    if(DamageType->IsA<UIceDamageType>())
+    if(Damage <= 0.0f || IsDeath())
     {
-        UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Cold"), true, false, FLinearColor::Blue);
+        return;
     }
-    else if (DamageType->IsA<UFireDamageType>())
+    Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+    OnHealthChanged.Broadcast(Health, MaxHealth);
+    if(IsDeath())
     {
-        UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hot"), true, false, FLinearColor::Red); 
+        OnDeath.Broadcast();
     }
-    Health = FMath::Max(0.0f, Health - Damage);
 }
 
 float USTUHealthComponent::GetHealth() const
@@ -38,4 +39,9 @@ float USTUHealthComponent::GetHealth() const
 float USTUHealthComponent::GetMaxHealth() const
 {
     return MaxHealth;
+}
+
+bool USTUHealthComponent::IsDeath() const
+{
+    return Health <= 0.0f;
 }
