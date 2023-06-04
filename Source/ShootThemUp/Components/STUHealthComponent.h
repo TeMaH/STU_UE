@@ -35,11 +35,22 @@ public:
 
 protected:
     virtual void BeginPlay() override;
+    virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+    void ChangeHealthValue(const float InAmount);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     float MaxHealth = 100.0f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Heal")
+    float DelayBeforeHeal = 2.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Heal")
+    float HealSpeed = 0.3f;
+
+
 protected:
     float Health = 0.0f;
+    float LastDamageTime = 0.0f;
 };
