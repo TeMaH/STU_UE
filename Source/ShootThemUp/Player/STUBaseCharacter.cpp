@@ -7,6 +7,8 @@
 
 #include "Components/STUMovementComponent.h"
 #include "Components/STUHealthComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
     : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -66,6 +68,20 @@ void ASTUBaseCharacter::SprintStarted()
 void ASTUBaseCharacter::SprintEnded()
 {
     IsSprint = false;
+}
+
+void ASTUBaseCharacter::Landed(const FHitResult& Hit)
+{
+    Super::Landed(Hit);
+    const float VeloctiyZ = -GetVelocity().Z;
+    if (VeloctiyZ < FallVelocityRange.X)
+    {
+        return;
+    }
+    const float FallDamage = FMath::GetMappedRangeValueClamped(FallVelocityRange, FallDamageRange, VeloctiyZ);
+    UGameplayStatics::ApplyDamage(this, FallDamage, Controller, this, nullptr);
+    FString Msg = FString::Printf(TEXT("Velocity = %.1f Damage = %.1f"), VeloctiyZ, FallDamage);
+    UKismetSystemLibrary::PrintString(GetWorld(), Msg);
 }
 
 void ASTUBaseCharacter::OnDeath()

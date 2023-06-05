@@ -61,6 +61,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
     UAnimMontage* DeathMontage = nullptr;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+    FVector2D FallVelocityRange = FVector2D(650.0f, 950.0f);
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+    FVector2D FallDamageRange = FVector2D(15.0f, 45.0f);
+
     bool IsSprint = false;
 
 protected:
@@ -71,6 +77,7 @@ protected:
     virtual void MoveForward(IN float InValue);
     virtual void SprintStarted();
     virtual void SprintEnded();
+    virtual void Landed(const FHitResult& Hit);
 
     void OnDeath();
     void OnHealthChnaged(const float InHealth, const float InMaxHealth);
