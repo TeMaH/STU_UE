@@ -12,6 +12,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UTextRenderComponent;
 class USTUHealthComponent;
+class ASTUBaseWeapone;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
@@ -67,6 +68,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
     FVector2D FallDamageRange = FVector2D(15.0f, 45.0f);
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+    TSubclassOf<ASTUBaseWeapone> WeaponeClass = nullptr;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapone")
+    ASTUBaseWeapone* Weapone = nullptr;
+
     bool IsSprint = false;
 
 protected:
@@ -82,6 +89,7 @@ protected:
     void OnDeath();
     void OnHealthChnaged(const float InHealth, const float InMaxHealth);
     void UpdateHealthText(const float InHealth);
+    void CreateWeapone();
 
 public:
     virtual void Tick(float DeltaTime) override;

@@ -4,11 +4,12 @@
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Components/TextRenderComponent.h>
 #include <GameFramework/SpringArmComponent.h>
+#include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
 
 #include "Components/STUMovementComponent.h"
 #include "Components/STUHealthComponent.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Kismet/GameplayStatics.h"
+#include "Actors/STUBaseWeapone.h"
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
     : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -38,6 +39,7 @@ void ASTUBaseCharacter::BeginPlay()
     HealthComponent->OnDeath.AddUObject(this, &ThisClass::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &ThisClass::OnHealthChnaged);
     UpdateHealthText(HealthComponent->GetHealth());
+    CreateWeapone();
 }
 
 void ASTUBaseCharacter::Turn(IN float InValue)
@@ -103,6 +105,13 @@ void ASTUBaseCharacter::OnHealthChnaged(const float InHealth, const float InMaxH
 void ASTUBaseCharacter::UpdateHealthText(const float InHealth)
 {
     TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), InHealth)));
+}
+
+void ASTUBaseCharacter::CreateWeapone()
+{
+    Weapone = GetWorld()->SpawnActor<ASTUBaseWeapone>(WeaponeClass);
+    FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+    Weapone->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
