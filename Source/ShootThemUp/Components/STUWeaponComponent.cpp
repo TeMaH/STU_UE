@@ -19,7 +19,12 @@ void USTUWeaponComponent::BeginPlay()
 
 void USTUWeaponComponent::Fire()
 {
+    if(!CurrentWeapone)
+    {
+        return;
+    }
     UE_LOG(WeaponComp, Warning, TEXT("Fire"));
+    CurrentWeapone->TryFire();
 }
 
 void USTUWeaponComponent::CreateWeapone()
@@ -36,4 +41,5 @@ void USTUWeaponComponent::CreateWeapone()
     }
     FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
     CurrentWeapone->AttachToComponent(Character->GetMesh(), AttachmentRules, "WeaponSocket");
+    CurrentWeapone->SetOwner(Character);
 }

@@ -12,6 +12,8 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 
 public:
     ASTUBaseWeapon();
+    
+    bool TryFire();
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -19,4 +21,6 @@ protected:
 
 protected:
     virtual void BeginPlay() override;
+
+    void MakeShot();
 };
