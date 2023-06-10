@@ -12,7 +12,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UTextRenderComponent;
 class USTUHealthComponent;
-class ASTUBaseWeapone;
+class USTUWeaponComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
@@ -35,6 +35,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USTUHealthComponent* HealthComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    USTUWeaponComponent* WeaponComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
     FName LookUpAxisName = "";
 
@@ -54,6 +57,9 @@ protected:
     FName SprintName = "";
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+    FName FireName = "";
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
     float MouseSensitivityScale_Pitch = 1.f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
@@ -67,12 +73,6 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
     FVector2D FallDamageRange = FVector2D(15.0f, 45.0f);
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
-    TSubclassOf<ASTUBaseWeapone> WeaponeClass = nullptr;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapone")
-    ASTUBaseWeapone* Weapone = nullptr;
 
     bool IsSprint = false;
 
@@ -89,7 +89,6 @@ protected:
     void OnDeath();
     void OnHealthChnaged(const float InHealth, const float InMaxHealth);
     void UpdateHealthText(const float InHealth);
-    void CreateWeapone();
 
 public:
     virtual void Tick(float DeltaTime) override;

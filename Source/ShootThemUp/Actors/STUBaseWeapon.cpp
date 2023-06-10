@@ -1,13 +1,13 @@
-#include "Actors/STUBaseWeapone.h"
+#include "Actors/STUBaseWeapon.h"
 
-ASTUBaseWeapone::ASTUBaseWeapone()
+ASTUBaseWeapon::ASTUBaseWeapon()
 {
     PrimaryActorTick.bCanEverTick = false;
     MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>("MeshComponent");
     SetRootComponent(MeshComponent);
 }
 
-void ASTUBaseWeapone::BeginPlay()
+void ASTUBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();
 }

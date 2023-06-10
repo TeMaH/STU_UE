@@ -9,7 +9,7 @@
 
 #include "Components/STUMovementComponent.h"
 #include "Components/STUHealthComponent.h"
-#include "Actors/STUBaseWeapone.h"
+#include "Components/STUWeaponComponent.h"
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) 
     : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -27,12 +27,15 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
 
     HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 
+    WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
+
     TurnAxisName = TEXT("Turn");
     LookUpAxisName = TEXT("LookUp");
     MoveForwardAxisName = TEXT("MoveForward");
     MoveRightAxisName = TEXT("MoveRight");
     JumpName = TEXT("Jump");
     SprintName = TEXT("Sprint");
+    FireName = TEXT("Fire");
 }
 
 
@@ -42,7 +45,6 @@ void ASTUBaseCharacter::BeginPlay()
     HealthComponent->OnDeath.AddUObject(this, &ThisClass::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &ThisClass::OnHealthChnaged);
     UpdateHealthText(HealthComponent->GetHealth());
-    CreateWeapone();
 }
 
 void ASTUBaseCharacter::Turn(IN float InValue)
@@ -110,13 +112,6 @@ void ASTUBaseCharacter::UpdateHealthText(const float InHealth)
     TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), InHealth)));
 }
 
-void ASTUBaseCharacter::CreateWeapone()
-{
-    Weapone = GetWorld()->SpawnActor<ASTUBaseWeapone>(WeaponeClass);
-    FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
-    Weapone->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
-}
-
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
@@ -133,6 +128,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction(JumpName, IE_Pressed, this, &ASTUBaseCharacter::Jump);
     PlayerInputComponent->BindAction(SprintName, IE_Pressed, this, &ASTUBaseCharacter::SprintStarted);
     PlayerInputComponent->BindAction(SprintName, IE_Released, this, &ASTUBaseCharacter::SprintEnded);
+    PlayerInputComponent->BindAction(FireName, IE_Released, WeaponComponent, &USTUWeaponComponent::Fire);
 }
 
 bool ASTUBaseCharacter::IsSprintMovement() const

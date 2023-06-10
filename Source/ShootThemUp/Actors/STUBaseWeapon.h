@@ -3,15 +3,15 @@
 #include <CoreMinimal.h>
 #include <GameFramework/Actor.h>
 
-#include "STUBaseWeapone.generated.h"
+#include "STUBaseWeapon.generated.h"
 
 UCLASS()
-class SHOOTTHEMUP_API ASTUBaseWeapone : public AActor
+class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
     GENERATED_BODY()
 
 public:
-    ASTUBaseWeapone();
+    ASTUBaseWeapon();
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
