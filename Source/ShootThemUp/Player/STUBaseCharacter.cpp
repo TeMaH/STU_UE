@@ -17,10 +17,13 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
     PrimaryActorTick.bCanEverTick = true;
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
     SpringArmComponent->SetupAttachment(GetRootComponent());
+    SpringArmComponent->SocketOffset = FVector(0.0f, 100.0f, 80.0f);
+
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
     TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthRender");
     TextRenderComponent->SetupAttachment(GetRootComponent());
+    TextRenderComponent->bOwnerNoSee = true;
 
     HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 
