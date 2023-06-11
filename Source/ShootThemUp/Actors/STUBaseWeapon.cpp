@@ -43,6 +43,11 @@ void ASTUBaseWeapon::MakeShot()
     GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
     if(HitResult.bBlockingHit)
     {
+        if (auto Target = Cast<ACharacter>(HitResult.GetActor()))
+        {
+            Target->TakeDamage(AmountDamage, FDamageEvent(DamageClass), Controller, GetOwner());
+        }
+        
         DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 5.0f, 16, FColor::Red, false, 2.0f);
         DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), HitResult.ImpactPoint, FColor::Yellow, false, 2.0f);
     }

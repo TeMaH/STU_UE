@@ -19,6 +19,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     USkeletalMeshComponent* MeshComponent;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
+    float AmountDamage;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
+    TSubclassOf<UDamageType> DamageClass;
+
 protected:
     virtual void BeginPlay() override;
 
