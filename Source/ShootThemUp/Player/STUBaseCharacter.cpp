@@ -3,6 +3,7 @@
 #include <Camera/CameraComponent.h>
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Components/TextRenderComponent.h>
+#include <Components/CapsuleComponent.h>
 #include <GameFramework/SpringArmComponent.h>
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
@@ -100,6 +101,7 @@ void ASTUBaseCharacter::OnDeath()
     {
         Controller->ChangeState(NAME_Spectating);
     }
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 }
 
 void ASTUBaseCharacter::OnHealthChnaged(const float InHealth, const float InMaxHealth)
