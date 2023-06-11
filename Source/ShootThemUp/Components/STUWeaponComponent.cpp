@@ -17,14 +17,22 @@ void USTUWeaponComponent::BeginPlay()
     CreateWeapone();
 }
 
-void USTUWeaponComponent::Fire()
+void USTUWeaponComponent::StartFire()
 {
     if(!CurrentWeapone)
     {
         return;
     }
-    UE_LOG(WeaponComp, Warning, TEXT("Fire"));
-    CurrentWeapone->TryFire();
+    CurrentWeapone->StartFire();
+}
+
+void USTUWeaponComponent::StopFire()
+{
+    if (!CurrentWeapone)
+    {
+        return;
+    }
+    CurrentWeapone->StopFire();
 }
 
 void USTUWeaponComponent::CreateWeapone()

@@ -130,7 +130,8 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction(JumpName, IE_Pressed, this, &ASTUBaseCharacter::Jump);
     PlayerInputComponent->BindAction(SprintName, IE_Pressed, this, &ASTUBaseCharacter::SprintStarted);
     PlayerInputComponent->BindAction(SprintName, IE_Released, this, &ASTUBaseCharacter::SprintEnded);
-    PlayerInputComponent->BindAction(FireName, IE_Released, WeaponComponent, &USTUWeaponComponent::Fire);
+    PlayerInputComponent->BindAction(FireName, IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
+    PlayerInputComponent->BindAction(FireName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
 }
 
 bool ASTUBaseCharacter::IsSprintMovement() const

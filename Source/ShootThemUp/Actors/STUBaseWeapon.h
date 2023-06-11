@@ -13,6 +13,9 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 public:
     ASTUBaseWeapon();
     
+    void StartFire();
+    void StopFire();
+
     bool TryFire();
 
 protected:
@@ -25,8 +28,14 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
     TSubclassOf<UDamageType> DamageClass;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire")
+    float ShotInterval = 0.5f;
+
 protected:
     virtual void BeginPlay() override;
 
     void MakeShot();
+
+protected:
+    FTimerHandle FireTimerHandle;
 };

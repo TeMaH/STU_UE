@@ -13,6 +13,17 @@ void ASTUBaseWeapon::BeginPlay()
     Super::BeginPlay();
 }
 
+void ASTUBaseWeapon::StartFire()
+{
+    GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &ThisClass::MakeShot, ShotInterval, true);
+    MakeShot();
+}
+
+void ASTUBaseWeapon::StopFire()
+{
+    GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+}
+
 bool ASTUBaseWeapon::TryFire()
 {
     MakeShot();
