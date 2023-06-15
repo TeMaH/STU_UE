@@ -8,6 +8,7 @@
 #include "STUProjectile.generated.h"
 
 class USphereComponent;
+class UProjectileMovementComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUProjectile : public AActor
@@ -17,10 +18,18 @@ class SHOOTTHEMUP_API ASTUProjectile : public AActor
 public:
     ASTUProjectile();
 
+    void SetDirection(const FVector InDirection);
+
 protected:
     virtual void BeginPlay() override;
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     USphereComponent* CollisionComponent;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+    UProjectileMovementComponent* MovementComponent;
+
+protected:
+    FVector Direction = FVector::ZeroVector;
 };

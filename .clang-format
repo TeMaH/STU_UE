@@ -1,3 +1,4 @@
+---
 Language:        Cpp
 AccessModifierOffset: -4
 AlignAfterOpenBracket: DontAlign
@@ -26,7 +27,7 @@ BreakConstructorInitializersBeforeComma: false
 BreakConstructorInitializers: BeforeComma
 BreakAfterJavaFieldAnnotations: false
 BreakStringLiterals: true
-ColumnLimit:     132
+ColumnLimit:     256
 CommentPragmas:  '^ IWYU pragma:'
 CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
@@ -38,18 +39,17 @@ DisableFormat:   false
 FixNamespaceComments: true
 ForEachMacros:
   - for
-IncludeBlocks:   Regroup
 IncludeCategories:
   - Regex:           '.*\.generated\.h'
     Priority:        100
   - Regex:           '.*(PCH).*'
     Priority:        -1
   - Regex:           '".*"'
-    Priority:        1
-  - Regex:           '^<.*\.(h)>'
-    Priority:        3
-  - Regex:           '^<.*>'
     Priority:        4
+  - Regex:           '^<.*\.(h)>'
+    Priority:        2
+  - Regex:           '^<.*>'
+    Priority:        1
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseLabels: true
 IndentPPDirectives: None
@@ -114,7 +114,7 @@ SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: ControlStatements
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 4
+SpacesBeforeTrailingComments: 1
 SpacesInAngles:  false
 SpacesInContainerLiterals: true
 SpacesInCStyleCastParentheses: false
@@ -123,3 +123,4 @@ SpacesInSquareBrackets: false
 Standard:        Auto
 TabWidth:        4
 UseTab:          Never
+...

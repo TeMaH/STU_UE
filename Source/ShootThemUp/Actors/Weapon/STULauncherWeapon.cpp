@@ -19,7 +19,7 @@ void ASTULauncherWeapon::StopFire()
 void ASTULauncherWeapon::MakeShot()
 {
     FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
-    auto Projectile = UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, MuzzleSocket);
-
-    UGameplayStatics::FinishSpawningActor(Projectile, MuzzleSocket);
+    auto Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, MuzzleSocket);
+    Projectile->SetDirection(MuzzleSocket.GetRotation().Vector());
+    Projectile->FinishSpawning(MuzzleSocket);
 }
