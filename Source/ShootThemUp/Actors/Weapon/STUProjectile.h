@@ -23,12 +23,26 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* InHitComponent, AActor* InOtherActor, UPrimitiveComponent* InOtherComp, FVector InNormalImpulse, const FHitResult& InHit );
+    
+    APlayerController* GetController() const;
+
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     USphereComponent* CollisionComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UProjectileMovementComponent* MovementComponent;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+    float DamageAmount = 200.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+    float Radius = 100.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+    bool FullDamage = false;
 
 protected:
     FVector Direction = FVector::ZeroVector;

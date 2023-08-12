@@ -21,5 +21,6 @@ void ASTULauncherWeapon::MakeShot()
     FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
     auto Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, MuzzleSocket);
     Projectile->SetDirection(MuzzleSocket.GetRotation().Vector());
+    Projectile->SetOwner(GetOwner());
     Projectile->FinishSpawning(MuzzleSocket);
 }

@@ -14,7 +14,42 @@ USTUWeaponComponent::USTUWeaponComponent()
 void USTUWeaponComponent::BeginPlay()
 {
     Super::BeginPlay();
-    CreateWeapone();
+    if (const auto Character = Cast<ACharacter>(GetOwner()))
+    {
+        CharacterMesh = Character->GetMesh();
+    }
+    WeaponeIndex = 0;
+    CreateWeapones();
+    EquipeNextWeapone();
+}
+
+void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    StopFire();
+    CurrentWeapone = nullptr;
+    for (auto Weapone : AllWeapones)
+    {
+        Weapone->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+        Weapone->Destroy();
+    }
+    AllWeapones.Empty();
+    Super::EndPlay(EndPlayReason);
+}
+
+void USTUWeaponComponent::CreateWeapones()
+{
+    const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+    for (auto WeaponeClass : WeaponeClasses)
+    {
+        auto Weapone = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponeClass);
+        if (!ensure(IsValid(Weapone)))
+        {
+            continue;
+        }
+        AttachToSocket(Weapone, CharacterMesh.Get(), EquipmentSocketName);
+        Weapone->SetOwner(GetOwner());
+        AllWeapones.Add(Weapone);
+    }
 }
 
 void USTUWeaponComponent::StartFire()
@@ -35,19 +70,20 @@ void USTUWeaponComponent::StopFire()
     CurrentWeapone->StopFire();
 }
 
-void USTUWeaponComponent::CreateWeapone()
+void USTUWeaponComponent::EquipeNextWeapone()
 {
-    const auto Character = Cast<ACharacter>(GetOwner());
-    if (!ensure(IsValid(Character)))
+    StopFire();
+    if (CurrentWeapone)
     {
-        return;
+        AttachToSocket(CurrentWeapone, CharacterMesh.Get(), EquipmentSocketName);
     }
-    CurrentWeapone = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponeClass);
-    if(!ensure(IsValid(CurrentWeapone)))
-    {
-        return;
-    }
+    WeaponeIndex = (WeaponeIndex + 1) % AllWeapones.Num();
+    CurrentWeapone = AllWeapones[WeaponeIndex];
+    AttachToSocket(CurrentWeapone, CharacterMesh.Get(), WeaponSocketName);
+}
+
+void USTUWeaponComponent::AttachToSocket(AActor* InTarget, USceneComponent* InParent, FName InSocketName)
+{
     FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
-    CurrentWeapone->AttachToComponent(Character->GetMesh(), AttachmentRules, "WeaponSocket");
-    CurrentWeapone->SetOwner(Character);
+    InTarget->AttachToComponent(InParent, AttachmentRules, InSocketName);
 }
