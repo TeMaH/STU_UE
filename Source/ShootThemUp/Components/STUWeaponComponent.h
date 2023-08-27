@@ -29,6 +29,7 @@ protected:
     void CreateWeapones();
 
     void AttachToSocket(AActor* Target, USceneComponent* SocketComponent, FName SocketName);
+    void OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
@@ -40,16 +41,18 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
     TArray<TSubclassOf<ASTUBaseWeapon>> WeaponeClasses;
 
-    /*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
-    TSubclassOf<ASTUBaseWeapon> WeaponeClass = nullptr;*/
-
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapone")
     ASTUBaseWeapon* CurrentWeapone = nullptr;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapone")
     TArray<ASTUBaseWeapon*> AllWeapones;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "View")
+    UAnimMontage* EquipMontage = nullptr;
+
 protected:
     int32 WeaponeIndex = 0;
     TWeakObjectPtr<USceneComponent> CharacterMesh = nullptr;
+    TWeakObjectPtr<ACharacter> CharacterOwner = nullptr;
+    bool IsChangeWeaponInProgress = false;
 };
