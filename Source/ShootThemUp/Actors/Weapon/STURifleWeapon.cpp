@@ -18,6 +18,11 @@ void ASTURifleWeapon::StopFire()
 void ASTURifleWeapon::MakeShot()
 {
     const auto Character = Cast<ACharacter>(GetOwner());
+    if (IsAmmoEmpty())
+    {
+        StopFire();
+        return;
+    }
     if (!Character)
     {
         return;
@@ -51,4 +56,5 @@ void ASTURifleWeapon::MakeShot()
     {
         DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), EndTraceLocation, FColor::Green, false, 2.0f);
     }
+    DecreaseAmmo();
 }
