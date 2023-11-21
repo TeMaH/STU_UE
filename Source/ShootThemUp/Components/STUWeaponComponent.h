@@ -10,6 +10,17 @@ class ASTUBaseWeapon;
 
 DECLARE_LOG_CATEGORY_EXTERN(WeaponComp, Log, All);
 
+USTRUCT(BlueprintType)
+struct SHOOTTHEMUP_API FWeaponData
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TSubclassOf<ASTUBaseWeapon> Class = nullptr;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UAnimMontage* ReloadAnimMontage = nullptr;
+};
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
 {
@@ -21,6 +32,7 @@ public:
     void StartFire();
     void StopFire();
     void EquipeNextWeapone();
+    void RealoadWeapone();
 
 protected:
     virtual void BeginPlay() override;
@@ -39,7 +51,7 @@ protected:
     FName EquipmentSocketName = "EquipmentSocket";
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
-    TArray<TSubclassOf<ASTUBaseWeapon>> WeaponeClasses;
+    TArray<FWeaponData> WeaponesData;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapone")
     ASTUBaseWeapon* CurrentWeapone = nullptr;
@@ -49,6 +61,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "View")
     UAnimMontage* EquipMontage = nullptr;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "View")
+    UAnimMontage* ReloadCurrentWeaponMontage = nullptr;
 
 protected:
     int32 WeaponeIndex = 0;

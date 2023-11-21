@@ -133,6 +133,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction(FireName, IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
     PlayerInputComponent->BindAction(FireName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
     PlayerInputComponent->BindAction(ChangeWeaponeName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::EquipeNextWeapone);
+    PlayerInputComponent->BindAction(ReloadWeaponeName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::RealoadWeapone);
 }
 
 bool ASTUBaseCharacter::IsSprintMovement() const

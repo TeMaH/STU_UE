@@ -50,9 +50,9 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void USTUWeaponComponent::CreateWeapones()
 {
     const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
-    for (auto WeaponeClass : WeaponeClasses)
+    for (auto WeaponData : WeaponesData)
     {
-        auto Weapone = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponeClass);
+        auto Weapone = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponData.Class);
         if (!ensure(IsValid(Weapone)))
         {
             continue;
@@ -92,6 +92,11 @@ void USTUWeaponComponent::EquipeNextWeapone()
     StopFire();
 }
 
+void USTUWeaponComponent::RealoadWeapone()
+{
+    CharacterOwner->PlayAnimMontage(ReloadCurrentWeaponMontage);
+}
+
 void USTUWeaponComponent::AttachToSocket(AActor* InTarget, USceneComponent* InParent, FName InSocketName)
 {
     FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
@@ -112,5 +117,6 @@ void USTUWeaponComponent::OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp
     CurrentWeapone = AllWeapones[WeaponeIndex];
     AttachToSocket(CurrentWeapone, CharacterMesh.Get(), WeaponSocketName);
     IsChangeWeaponInProgress = false;
-    UKismetSystemLibrary::PrintString(GetWorld(), __FUNCTION__);
+    auto WeaponData = WeaponesData.FindByPredicate([&](const FWeaponData& Data) { return Data.Class == CurrentWeapone->GetClass(); });
+    ReloadCurrentWeaponMontage = WeaponData->ReloadAnimMontage;
 }
