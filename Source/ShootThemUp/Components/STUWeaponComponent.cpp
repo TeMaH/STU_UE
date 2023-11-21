@@ -5,6 +5,7 @@
 
 #include "Actors/STUBaseWeapon.h"
 #include "Animations/STUChangeWeapon_AnimNotify.h"
+#include <Animations/STUReloadFinishedAnimNotify.h>
 
 DEFINE_LOG_CATEGORY(WeaponComp);
 
@@ -24,12 +25,16 @@ void USTUWeaponComponent::BeginPlay()
     WeaponeIndex = 0;
     CreateWeapones();
     EquipeNextWeapone();
-    for (auto AnimNotifyEvent : EquipMontage->Notifies)
+    
+    if (USTUChangeWeapon_AnimNotify* ChangeWeaponNotify = FindNotifyByClass<USTUChangeWeapon_AnimNotify>(EquipMontage))
     {
-        if (USTUChangeWeapon_AnimNotify* ChangeWeaponNotify = Cast<USTUChangeWeapon_AnimNotify>(AnimNotifyEvent.Notify))
+        ChangeWeaponNotify->OnAnimNotifyDelegate.AddUObject(this, &ThisClass::OnChangeWeaponeNotify);
+    }
+    for (auto WeaponData : WeaponesData)
+    {
+        if (USTUReloadFinishedAnimNotify* ReloadWeaponNotify = FindNotifyByClass<USTUReloadFinishedAnimNotify>(WeaponData.ReloadAnimMontage))
         {
-            ChangeWeaponNotify->OnAnimNotifyDelegate.AddUObject(this, &ThisClass::OnChangeWeaponeNotify);
-            break;
+            ReloadWeaponNotify->OnAnimNotifyDelegate.AddUObject(this, &ThisClass::OnReloadFinishedNotify);
         }
     }
 }
@@ -65,7 +70,7 @@ void USTUWeaponComponent::CreateWeapones()
 
 void USTUWeaponComponent::StartFire()
 {
-    if (!CurrentWeapone || IsChangeWeaponInProgress)
+    if (!CurrentWeapone || IsChangeWeaponInProgress || IsReloadWeaponInProgress)
     {
         return;
     }
@@ -83,7 +88,7 @@ void USTUWeaponComponent::StopFire()
 
 void USTUWeaponComponent::EquipeNextWeapone()
 {
-    if (IsChangeWeaponInProgress)
+    if (IsChangeWeaponInProgress || IsReloadWeaponInProgress)
     {
         return;
     }
@@ -94,6 +99,7 @@ void USTUWeaponComponent::EquipeNextWeapone()
 
 void USTUWeaponComponent::RealoadWeapone()
 {
+    IsReloadWeaponInProgress = true;
     CharacterOwner->PlayAnimMontage(ReloadCurrentWeaponMontage);
 }
 
@@ -119,4 +125,9 @@ void USTUWeaponComponent::OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp
     IsChangeWeaponInProgress = false;
     auto WeaponData = WeaponesData.FindByPredicate([&](const FWeaponData& Data) { return Data.Class == CurrentWeapone->GetClass(); });
     ReloadCurrentWeaponMontage = WeaponData->ReloadAnimMontage;
+}
+
+void USTUWeaponComponent::OnReloadFinishedNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+{
+    IsReloadWeaponInProgress = false;
 }

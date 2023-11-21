@@ -42,6 +42,7 @@ protected:
 
     void AttachToSocket(AActor* Target, USceneComponent* SocketComponent, FName SocketName);
     void OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
+    void OnReloadFinishedNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
@@ -70,4 +71,23 @@ protected:
     TWeakObjectPtr<USceneComponent> CharacterMesh = nullptr;
     TWeakObjectPtr<ACharacter> CharacterOwner = nullptr;
     bool IsChangeWeaponInProgress = false;
+    bool IsReloadWeaponInProgress = false;
+
+    template<typename T>
+    T* FindNotifyByClass(UAnimSequenceBase* Animation)
+    {
+        if (!Animation)
+        {
+            return nullptr;
+        }
+        for (auto AnimNotifyEvent : Animation->Notifies)
+        {
+            if (T* Notify = Cast<T>(AnimNotifyEvent.Notify))
+            {
+                return Notify;
+            }
+        }
+
+        return nullptr;
+    }
 };
