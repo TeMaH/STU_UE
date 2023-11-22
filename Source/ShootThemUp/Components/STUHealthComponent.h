@@ -21,6 +21,9 @@ public:
     float GetMaxHealth() const;
 
     UFUNCTION(BlueprintCallable)
+    float GetHealthPercent() const;
+
+    UFUNCTION(BlueprintCallable)
     bool IsDeath() const;
 
     UFUNCTION()
