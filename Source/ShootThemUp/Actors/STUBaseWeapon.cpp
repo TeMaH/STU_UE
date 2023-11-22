@@ -24,17 +24,21 @@ void ASTUBaseWeapon::DecreaseAmmo()
     LogAmmoData();
     if (IsClipEmpty() && !IsAmmoEmpty())
     {
-        ChangeClip();
+        OnClipEmptyDelegate.Broadcast();
     }
 }
 
 void ASTUBaseWeapon::ChangeClip()
 {
-    CurrentAmmoData.Bullets = DefaultAmmoData.Bullets;
     if (!CurrentAmmoData.Infinite)
     {
+        if (CurrentAmmoData.Clips == 0)
+        {
+            return;
+        }
         CurrentAmmoData.Clips--;
     }
+    CurrentAmmoData.Bullets = DefaultAmmoData.Bullets;
     UE_LOG(Weapon, Log, TEXT("---------- ChangeClip ----------"));
 }
 
@@ -61,4 +65,9 @@ void ASTUBaseWeapon::StartFire()
 void ASTUBaseWeapon::StopFire()
 {
     
+}
+
+bool ASTUBaseWeapon::CanReload() const
+{
+    return CurrentAmmoData.Bullets < DefaultAmmoData.Bullets && CurrentAmmoData.Clips > 0;
 }

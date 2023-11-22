@@ -6,6 +6,7 @@
 #include "STUBaseWeapon.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(Weapon, Log, All);
+DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
 
 USTRUCT(BlueprintType)
 struct SHOOTTHEMUP_API FAmmoData
@@ -31,12 +32,15 @@ public:
     
     virtual void StartFire();
     virtual void StopFire();
+    virtual bool CanReload() const;
+    void ChangeClip();
+
+    FOnClipEmptySignature OnClipEmptyDelegate;
 
 protected:
     virtual void BeginPlay() override;
 
     void DecreaseAmmo();
-    void ChangeClip();
     bool IsAmmoEmpty() const;
     bool IsClipEmpty() const;
     void LogAmmoData() const;

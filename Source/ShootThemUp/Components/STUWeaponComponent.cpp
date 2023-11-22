@@ -64,6 +64,7 @@ void USTUWeaponComponent::CreateWeapones()
         }
         AttachToSocket(Weapone, CharacterMesh.Get(), EquipmentSocketName);
         Weapone->SetOwner(GetOwner());
+        Weapone->OnClipEmptyDelegate.AddUObject(this, &ThisClass::ReloadWeapon);
         AllWeapones.Add(Weapone);
     }
 }
@@ -97,8 +98,13 @@ void USTUWeaponComponent::EquipeNextWeapone()
     StopFire();
 }
 
-void USTUWeaponComponent::RealoadWeapone()
+void USTUWeaponComponent::ReloadWeapon()
 {
+    if (!CurrentWeapone->CanReload())
+    {
+        return;
+    }
+    StopFire();
     IsReloadWeaponInProgress = true;
     CharacterOwner->PlayAnimMontage(ReloadCurrentWeaponMontage);
 }
@@ -130,4 +136,5 @@ void USTUWeaponComponent::OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp
 void USTUWeaponComponent::OnReloadFinishedNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
     IsReloadWeaponInProgress = false;
+    CurrentWeapone->ChangeClip();
 }

@@ -32,7 +32,7 @@ public:
     void StartFire();
     void StopFire();
     void EquipeNextWeapone();
-    void RealoadWeapone();
+    void ReloadWeapon();
 
 protected:
     virtual void BeginPlay() override;
