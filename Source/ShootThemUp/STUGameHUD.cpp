@@ -1,7 +1,15 @@
 #include "STUGameHUD.h"
 
 #include <Engine/Canvas.h>
+#include <Blueprint/UserWidget.h>
 
+
+void ASTUGameHUD::BeginPlay()
+{
+    Super::BeginPlay();
+    const auto PlayerHUD = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+    PlayerHUD->AddToViewport();
+}
 
 void ASTUGameHUD::DrawHUD()
 {
