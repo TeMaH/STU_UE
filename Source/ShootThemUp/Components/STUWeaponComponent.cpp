@@ -109,6 +109,16 @@ void USTUWeaponComponent::ReloadWeapon()
     CharacterOwner->PlayAnimMontage(ReloadCurrentWeaponMontage);
 }
 
+bool USTUWeaponComponent::TryGetWeaponUIData(FWeaponUIData& OutData) const
+{
+    if (!CurrentWeapone)
+    {
+        return false;
+    }
+    OutData = CurrentWeapone->GetUIData();
+    return true;
+}
+
 void USTUWeaponComponent::AttachToSocket(AActor* InTarget, USceneComponent* InParent, FName InSocketName)
 {
     FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);

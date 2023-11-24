@@ -12,6 +12,11 @@ ASTUBaseWeapon::ASTUBaseWeapon()
     SetRootComponent(MeshComponent);
 }
 
+FWeaponUIData ASTUBaseWeapon::GetUIData() const
+{
+    return UIData;
+}
+
 void ASTUBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();

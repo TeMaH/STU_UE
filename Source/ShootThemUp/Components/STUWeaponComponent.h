@@ -3,6 +3,7 @@
 #include <CoreMinimal.h>
 
 #include <Components/ActorComponent.h>
+#include <Actors\STUBaseWeapon.h>
 
 #include "STUWeaponComponent.generated.h"
 
@@ -33,6 +34,8 @@ public:
     void StopFire();
     void EquipeNextWeapone();
     void ReloadWeapon();
+
+    bool TryGetWeaponUIData(FWeaponUIData& OutData) const;
 
 protected:
     virtual void BeginPlay() override;

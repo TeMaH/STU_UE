@@ -22,6 +22,17 @@ struct SHOOTTHEMUP_API FAmmoData
 };
 
 
+USTRUCT(BlueprintType)
+struct SHOOTTHEMUP_API FWeaponUIData
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UTexture2D* MainIcon = nullptr;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UTexture2D* CrossHairIcon = nullptr;
+};
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
@@ -36,6 +47,8 @@ public:
     void ChangeClip();
 
     FOnClipEmptySignature OnClipEmptyDelegate;
+
+    FWeaponUIData GetUIData() const;
 
 protected:
     virtual void BeginPlay() override;
@@ -54,6 +67,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     FAmmoData DefaultAmmoData{15, 10, false};
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+    FWeaponUIData UIData;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
     TSubclassOf<UDamageType> DamageClass;
