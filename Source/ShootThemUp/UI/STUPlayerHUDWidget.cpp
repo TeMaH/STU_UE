@@ -1,19 +1,18 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿#include "STUPlayerHUDWidget.h"
 
-
-#include "UI/STUPlayerHUDWidget.h"
+#include "Actors/STUBaseWeapon.h"
 #include "Components/STUHealthComponent.h"
-#include <Actors\STUBaseWeapon.h>
-#include <Components\STUWeaponComponent.h>
+#include "Components/STUWeaponComponent.h"
+#include "Player/STUBaseCharacter.h"
 
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {
-    const auto PlayerPawn = GetOwningPlayerPawn(); 
-    if (!PlayerPawn)
+    const auto* Player = GetOwningPlayerPawn<ASTUBaseCharacter>(); 
+    if (!Player)
     {
         return 0.0f;
     }
-    const auto HealthComponent = PlayerPawn->GetComponentByClass<USTUHealthComponent>();
+    const auto* HealthComponent = Player->GetHealthComponent();
     if (!HealthComponent)
     {
         return 0.0f;
@@ -23,12 +22,12 @@ float USTUPlayerHUDWidget::GetHealthPercent() const
 
 bool USTUPlayerHUDWidget::TryGetWeaponUIData(FWeaponUIData& OutData) const
 {
-    const auto PlayerPawn = GetOwningPlayerPawn();
-    if (!PlayerPawn)
+    const auto* Player = GetOwningPlayerPawn<ASTUBaseCharacter>(); 
+    if (!Player)
     {
         return false;
     }
-    const auto WeaponComponent = PlayerPawn->GetComponentByClass<USTUWeaponComponent>();
+    const auto* WeaponComponent = Player->GetWeaponComponent();
     if (!WeaponComponent)
     {
         return false;
@@ -38,12 +37,12 @@ bool USTUPlayerHUDWidget::TryGetWeaponUIData(FWeaponUIData& OutData) const
 
 FString USTUPlayerHUDWidget::GetAmmoData() const
 {
-    const auto PlayerPawn = GetOwningPlayerPawn();
-    if (!PlayerPawn)
+    const auto* Player = GetOwningPlayerPawn<ASTUBaseCharacter>();
+    if (!Player)
     {
         return "";
     }
-    const auto WeaponComponent = PlayerPawn->GetComponentByClass<USTUWeaponComponent>();
+    const auto* WeaponComponent = Player->GetWeaponComponent();
     if (!WeaponComponent)
     {
         return "";
@@ -58,4 +57,20 @@ FString USTUPlayerHUDWidget::GetAmmoData() const
         return FString::Printf(TEXT("%i / %i"), AmmoData.Bullets, AmmoData.Clips);
     }
 
+}
+
+bool USTUPlayerHUDWidget::IsPlayerAlive() const
+{
+    const auto* Player = GetOwningPlayerPawn<ASTUBaseCharacter>();
+    if (!Player)
+    {
+        return false;
+    }
+    return !Player->GetHealthComponent()->IsDeath();
+}
+
+bool USTUPlayerHUDWidget::IsSpectating() const
+{
+    const auto* Controller = GetOwningPlayer();
+    return Controller && Controller->GetStateName() == NAME_Spectating;
 }

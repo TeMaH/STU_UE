@@ -22,4 +22,10 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     FString GetAmmoData() const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool IsPlayerAlive() const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool IsSpectating() const;
 };

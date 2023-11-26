@@ -96,10 +96,14 @@ protected:
     void OnHealthChnaged(const float InHealth, const float InMaxHealth);
     void UpdateHealthText(const float InHealth);
 
+
 public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    const USTUWeaponComponent* GetWeaponComponent() const;
+    const USTUHealthComponent* GetHealthComponent() const;
 
     UFUNCTION(BlueprintCallable)
     bool IsSprintMovement() const;
