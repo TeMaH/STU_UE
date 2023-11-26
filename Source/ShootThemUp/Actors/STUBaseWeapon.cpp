@@ -24,6 +24,31 @@ const FAmmoData& ASTUBaseWeapon::GetAmmoData() const
     return CurrentAmmoData;
 }
 
+bool ASTUBaseWeapon::TryToAddClips(const float AmountClips)
+{
+    if (CurrentAmmoData.Infinite || IsFullAmmo() || AmountClips <= 0)
+    {
+        return false;
+    }
+    if (IsAmmoEmpty())
+    {
+        CurrentAmmoData.Clips = FMath::Min(AmountClips, DefaultAmmoData.Clips + 1);
+        OnClipEmptyDelegate.Broadcast();
+        return true;
+    }
+    const float NewAmountClips = CurrentAmmoData.Clips + AmountClips;
+    if (DefaultAmmoData.Clips - NewAmountClips >= 0)
+    {
+        CurrentAmmoData.Clips = NewAmountClips;
+    }
+    else
+    {
+        CurrentAmmoData.Clips = DefaultAmmoData.Clips + 1;
+        OnClipEmptyDelegate.Broadcast();
+    }
+    return true;
+}
+
 void ASTUBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();
@@ -69,15 +94,14 @@ void ASTUBaseWeapon::LogAmmoData() const
     UE_LOGFMT(Weapon, Log, "Bullets = {0}, Clips = {1}, Infinite = {2}", CurrentAmmoData.Bullets, CurrentAmmoData.Clips, CurrentAmmoData.Infinite);
 }
 
-void ASTUBaseWeapon::StartFire()
+bool ASTUBaseWeapon::IsFullAmmo() const
 {
-    
+    return CurrentAmmoData.Clips == DefaultAmmoData.Clips && CurrentAmmoData.Bullets == DefaultAmmoData.Bullets;
 }
 
-void ASTUBaseWeapon::StopFire()
-{
-    
-}
+void ASTUBaseWeapon::StartFire() { }
+
+void ASTUBaseWeapon::StopFire() { }
 
 bool ASTUBaseWeapon::CanReload() const
 {

@@ -39,6 +39,8 @@ public:
 
     const FAmmoData& GetWeaponAmmoData() const;
 
+    bool TryAddClips(TSubclassOf<ASTUBaseWeapon> WeaponClass, int32 Clips);
+
 protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);

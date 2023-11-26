@@ -52,6 +52,7 @@ public:
 
     FWeaponUIData GetUIData() const;
     const FAmmoData& GetAmmoData() const;
+    bool TryToAddClips(const float AmountClips);
 
 protected:
     virtual void BeginPlay() override;
@@ -60,6 +61,8 @@ protected:
     bool IsAmmoEmpty() const;
     bool IsClipEmpty() const;
     void LogAmmoData() const;
+    bool IsFullAmmo() const;
+
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")

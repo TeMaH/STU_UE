@@ -114,12 +114,12 @@ void ASTUBaseCharacter::UpdateHealthText(const float InHealth)
     TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), InHealth)));
 }
 
-const USTUWeaponComponent* ASTUBaseCharacter::GetWeaponComponent() const
+USTUWeaponComponent* ASTUBaseCharacter::GetWeaponComponent() const
 {
     return WeaponComponent;
 }
 
-const USTUHealthComponent* ASTUBaseCharacter::GetHealthComponent() const
+USTUHealthComponent* ASTUBaseCharacter::GetHealthComponent() const
 {
     return HealthComponent;
 }

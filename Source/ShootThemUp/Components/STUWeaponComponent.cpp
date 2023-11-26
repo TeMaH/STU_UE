@@ -128,6 +128,18 @@ const FAmmoData& USTUWeaponComponent::GetWeaponAmmoData() const
     return CurrentWeapone->GetAmmoData();
 }
 
+bool USTUWeaponComponent::TryAddClips(TSubclassOf<ASTUBaseWeapon> WeaponClass, int32 Clips)
+{
+    for (auto WeaponItem : AllWeapones)
+    {
+        if (WeaponItem && WeaponItem->IsA(WeaponClass))
+        {
+            return WeaponItem->TryToAddClips(Clips);
+        }
+    }
+    return false;
+}
+
 void USTUWeaponComponent::AttachToSocket(AActor* InTarget, USceneComponent* InParent, FName InSocketName)
 {
     FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
