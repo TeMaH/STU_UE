@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "BasePickUp.generated.h"
 
+class ASTUBaseCharacter;
 class USphereComponent;
 
 UCLASS()
@@ -26,5 +27,15 @@ public:
 
 protected:
     UPROPERTY(VisibleAnywhere)
-    USphereComponent* SphereComponent;
+    USphereComponent* SphereComponent = nullptr;
+
+    UPROPERTY(EditAnywhere)
+    float RespawnTime = 5.0f;
+
+ protected:
+    virtual bool GivePickeUpTo(ASTUBaseCharacter* Character);
+
+private:
+    void MakePickUp();
+    void RespawwnPickUp();
 };

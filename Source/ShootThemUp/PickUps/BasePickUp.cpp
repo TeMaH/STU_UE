@@ -26,11 +26,33 @@ void ABasePickUp::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
+bool ABasePickUp::GivePickeUpTo(ASTUBaseCharacter* Character)
+{
+    return true;
+}
+
+void ABasePickUp::MakePickUp()
+{
+    SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+    GetRootComponent()->SetVisibility(false, true);
+    FTimerHandle TimerHandler;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandler, this, &ThisClass::RespawwnPickUp, RespawnTime);
+}
+
+void ABasePickUp::RespawwnPickUp()
+{
+    SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+    GetRootComponent()->SetVisibility(true, true);
+}
+
 void ABasePickUp::NotifyActorBeginOverlap(AActor* OtherActor)
 {
     Super::NotifyActorBeginOverlap(OtherActor);
-    if (Cast<ASTUBaseCharacter>(OtherActor))
+    if (ASTUBaseCharacter* Character = Cast<ASTUBaseCharacter>(OtherActor))
     {
-        Destroy();
+        if (GivePickeUpTo(Character))
+        {
+            MakePickUp();
+        }
     }
 }
