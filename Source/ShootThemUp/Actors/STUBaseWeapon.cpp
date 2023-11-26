@@ -5,6 +5,8 @@
 
 DEFINE_LOG_CATEGORY(Weapon);
 
+const FAmmoData FAmmoData::Empty{0, 0, false};
+
 ASTUBaseWeapon::ASTUBaseWeapon()
 {
     PrimaryActorTick.bCanEverTick = false;
@@ -15,6 +17,11 @@ ASTUBaseWeapon::ASTUBaseWeapon()
 FWeaponUIData ASTUBaseWeapon::GetUIData() const
 {
     return UIData;
+}
+
+const FAmmoData& ASTUBaseWeapon::GetAmmoData() const
+{
+    return CurrentAmmoData;
 }
 
 void ASTUBaseWeapon::BeginPlay()

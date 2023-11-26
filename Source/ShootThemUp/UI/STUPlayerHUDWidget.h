@@ -19,4 +19,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool TryGetWeaponUIData(FWeaponUIData& OutData) const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    FString GetAmmoData() const;
 };

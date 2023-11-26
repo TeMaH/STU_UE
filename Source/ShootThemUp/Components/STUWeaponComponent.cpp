@@ -119,6 +119,15 @@ bool USTUWeaponComponent::TryGetWeaponUIData(FWeaponUIData& OutData) const
     return true;
 }
 
+const FAmmoData& USTUWeaponComponent::GetWeaponAmmoData() const
+{
+    if (!CurrentWeapone)
+    {
+        return FAmmoData::Empty;
+    }
+    return CurrentWeapone->GetAmmoData();
+}
+
 void USTUWeaponComponent::AttachToSocket(AActor* InTarget, USceneComponent* InParent, FName InSocketName)
 {
     FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);

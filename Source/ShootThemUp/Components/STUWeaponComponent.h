@@ -37,6 +37,8 @@ public:
 
     bool TryGetWeaponUIData(FWeaponUIData& OutData) const;
 
+    const FAmmoData& GetWeaponAmmoData() const;
+
 protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);

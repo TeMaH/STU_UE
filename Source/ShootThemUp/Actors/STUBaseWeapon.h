@@ -19,6 +19,8 @@ struct SHOOTTHEMUP_API FAmmoData
     int32 Clips;
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     bool Infinite;
+
+    static const FAmmoData Empty;
 };
 
 
@@ -49,6 +51,7 @@ public:
     FOnClipEmptySignature OnClipEmptyDelegate;
 
     FWeaponUIData GetUIData() const;
+    const FAmmoData& GetAmmoData() const;
 
 protected:
     virtual void BeginPlay() override;
