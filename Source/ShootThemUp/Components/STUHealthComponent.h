@@ -36,6 +36,9 @@ public:
     DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, const float, const float);
     FOnHealthChanged OnHealthChanged;
 
+public:
+    bool TryAddHealth(const float Amount);
+
 protected:
     virtual void BeginPlay() override;
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

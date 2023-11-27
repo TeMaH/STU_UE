@@ -9,6 +9,16 @@ USTUHealthComponent::USTUHealthComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+bool USTUHealthComponent::TryAddHealth(const float Amount)
+{
+    if (Health >= MaxHealth)
+    {
+        return false;
+    }
+    ChangeHealthValue(Amount);
+    return true;
+}
+
 void USTUHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
