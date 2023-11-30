@@ -1,6 +1,13 @@
 #include "Actors/Weapon/STURifleWeapon.h"
 
+#include "Components/STUWeaponVFXComponent.h"
+
 #include <GameFramework/Character.h>
+
+ASTURifleWeapon::ASTURifleWeapon()
+{
+    WeaponVFXComponent = CreateDefaultSubobject<USTUWeaponVFXComponent>("WeaponVFXComponent");
+}
 
 void ASTURifleWeapon::StartFire()
 {
@@ -48,9 +55,9 @@ void ASTURifleWeapon::MakeShot()
         {
             Target->TakeDamage(AmountDamage, FDamageEvent(DamageClass), Controller, GetOwner());
         }
-
-        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 5.0f, 16, FColor::Red, false, 2.0f);
-        DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), HitResult.ImpactPoint, FColor::Yellow, false, 2.0f);
+        WeaponVFXComponent->PlayVFX(HitResult);
+        /*DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 5.0f, 16, FColor::Red, false, 2.0f);
+        DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), HitResult.ImpactPoint, FColor::Yellow, false, 2.0f);*/
     }
     else
     {

@@ -4,6 +4,7 @@
 #include <GameFramework/ProjectileMovementComponent.h>
 #include <Kismet/GameplayStatics.h>
 
+#include "Components/STUWeaponVFXComponent.h"
 #include "Components/SphereComponent.h"
 
 
@@ -19,6 +20,8 @@ ASTUProjectile::ASTUProjectile()
     MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
     MovementComponent->InitialSpeed = 3000.0f;
     MovementComponent->ProjectileGravityScale = 0.5f;
+
+    WeaponVFXComponent = CreateDefaultSubobject<USTUWeaponVFXComponent>("WeaponVFXComponent");
 }
 
 void ASTUProjectile::SetDirection(const FVector InDirection)
@@ -37,6 +40,7 @@ void ASTUProjectile::BeginPlay()
 
 void ASTUProjectile::OnHit(UPrimitiveComponent* InHitComponent, AActor* InOtherActor, UPrimitiveComponent* InOtherComp, FVector InNormalImpulse, const FHitResult& InHit)
 {
+    WeaponVFXComponent->PlayVFX(InHit);
     DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 16, FColor::Yellow, false, 1.0f);
     UGameplayStatics::ApplyRadialDamage(GetWorld(), //
         DamageAmount,                               //

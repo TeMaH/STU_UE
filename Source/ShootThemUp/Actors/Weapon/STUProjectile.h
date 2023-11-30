@@ -35,6 +35,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UProjectileMovementComponent* MovementComponent;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+    class USTUWeaponVFXComponent* WeaponVFXComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
     float DamageAmount = 200.0f;
 
