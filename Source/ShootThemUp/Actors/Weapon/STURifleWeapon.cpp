@@ -48,6 +48,7 @@ void ASTURifleWeapon::MakeShot()
     FHitResult HitResult;
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(GetOwner());
+    Params.bReturnPhysicalMaterial = true;
     GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
     if (HitResult.bBlockingHit)
     {
