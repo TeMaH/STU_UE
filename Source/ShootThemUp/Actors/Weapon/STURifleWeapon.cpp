@@ -3,6 +3,7 @@
 #include "Components/STUWeaponVFXComponent.h"
 
 #include <GameFramework/Character.h>
+#include <Engine/DamageEvents.h>
 
 ASTURifleWeapon::ASTURifleWeapon()
 {
@@ -57,8 +58,6 @@ void ASTURifleWeapon::MakeShot()
             Target->TakeDamage(AmountDamage, FDamageEvent(DamageClass), Controller, GetOwner());
         }
         WeaponVFXComponent->PlayVFX(HitResult);
-        /*DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 5.0f, 16, FColor::Red, false, 2.0f);
-        DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), HitResult.ImpactPoint, FColor::Yellow, false, 2.0f);*/
     }
     else
     {
