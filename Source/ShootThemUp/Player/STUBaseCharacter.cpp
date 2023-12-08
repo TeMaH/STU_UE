@@ -94,14 +94,16 @@ void ASTUBaseCharacter::Landed(const FHitResult& Hit)
 
 void ASTUBaseCharacter::OnDeath()
 {
-    PlayAnimMontage(DeathMontage);
+    // PlayAnimMontage(DeathMontage);
     GetCharacterMovement()->DisableMovement();
     SetLifeSpan(5.0f);
     if (Controller)
     {
         Controller->ChangeState(NAME_Spectating);
     }
-    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+    GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    GetMesh()->SetSimulatePhysics(true);
 }
 
 void ASTUBaseCharacter::OnHealthChnaged(const float InHealth, const float InMaxHealth)
