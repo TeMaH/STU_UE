@@ -27,8 +27,7 @@ public:
     bool IsDeath() const;
 
     UFUNCTION()
-    void OnTakeAnyDamageCallback(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
-        class AController* InstigatedBy, AActor* DamageCauser);
+    void OnTakeAnyDamageCallback(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 
     DECLARE_MULTICAST_DELEGATE(FOnDeath);
     FOnDeath OnDeath;
@@ -44,6 +43,7 @@ protected:
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
     void ChangeHealthValue(const float InAmount);
+    void PlayCameraShake();
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -54,6 +54,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Heal")
     float HealSpeed = 0.3f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+    TSubclassOf<UCameraShakeBase> CameraShakeVFX;
 
 
 protected:

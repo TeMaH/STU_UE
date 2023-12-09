@@ -46,6 +46,21 @@ void USTUHealthComponent::ChangeHealthValue(const float InAmount)
     OnHealthChanged.Broadcast(Health, MaxHealth);
 }
 
+void USTUHealthComponent::PlayCameraShake()
+{
+    const APawn* Pawn = Cast<APawn>(GetOwner());
+    if(!Pawn)
+    {
+        return;
+    }
+    const APlayerController* PlayerController = Pawn->GetController<APlayerController>();
+    if(!PlayerController || !PlayerController->PlayerCameraManager)
+    {
+        return;
+    }
+    PlayerController->PlayerCameraManager->StartCameraShake(CameraShakeVFX);
+}
+
 void USTUHealthComponent::OnTakeAnyDamageCallback(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
     if(Damage <= 0.0f || IsDeath())
@@ -54,9 +69,14 @@ void USTUHealthComponent::OnTakeAnyDamageCallback(AActor* DamagedActor, float Da
     }
     ChangeHealthValue(-Damage);
     LastDamageTime = GetWorld()->RealTimeSeconds;
+    
     if(IsDeath())
     {
         OnDeath.Broadcast();
+    }
+    else
+    {
+        PlayCameraShake();
     }
 }
 
