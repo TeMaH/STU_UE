@@ -43,10 +43,10 @@ void USTUHealthComponent::TickComponent(float DeltaTime, enum ELevelTick TickTyp
 void USTUHealthComponent::ChangeHealthValue(const float InAmount)
 {
     Health = FMath::Clamp(Health + InAmount, 0.0f, MaxHealth);
-    OnHealthChanged.Broadcast(Health, MaxHealth);
+    OnHealthChanged.Broadcast(Health, InAmount);
 }
 
-void USTUHealthComponent::PlayCameraShake()
+void USTUHealthComponent::PlayCameraShake() const
 {
     const APawn* Pawn = Cast<APawn>(GetOwner());
     if(!Pawn)

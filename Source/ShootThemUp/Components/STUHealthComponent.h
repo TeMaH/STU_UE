@@ -43,7 +43,7 @@ protected:
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
     void ChangeHealthValue(const float InAmount);
-    void PlayCameraShake();
+    void PlayCameraShake() const;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

@@ -28,4 +28,13 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool IsSpectating() const;
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+    void OnTackDamage(const float Health, const float Delta);
+
+public:
+    virtual bool Initialize() override;
+
+protected:
+    void OnHealthChanged(const float Health, const float Delta);
 };
