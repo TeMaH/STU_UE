@@ -5,6 +5,7 @@
 
 #include "STUBaseWeapon.generated.h"
 
+class UNiagaraComponent;
 DECLARE_LOG_CATEGORY_EXTERN(Weapon, Log, All);
 DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
 
@@ -79,7 +80,12 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
     TSubclassOf<UDamageType> DamageClass;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+    class UNiagaraSystem* MuzzleVFX;
 
+    UNiagaraComponent* SpawnMuzzleVFX() const;
+    
 private:
     FAmmoData CurrentAmmoData;
 };

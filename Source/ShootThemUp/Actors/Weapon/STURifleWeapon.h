@@ -23,6 +23,9 @@ public:
 protected:
     void MakeShot();
 
+    void StartMuzzleVFX();
+    void SetVisibilityMuzzleVFX(const bool Visible) const;
+
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
     class USTUWeaponVFXComponent* WeaponVFXComponent;
@@ -32,6 +35,8 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire")
     float Dispersion = 1.5f;
+
+    TObjectPtr<UNiagaraComponent> MuzzleVFXComponent;
 
 protected:
     FTimerHandle FireTimerHandle;

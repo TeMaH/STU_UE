@@ -5,6 +5,8 @@
 #include <GameFramework/Character.h>
 #include <Engine/DamageEvents.h>
 
+#include "NiagaraComponent.h"
+
 ASTURifleWeapon::ASTURifleWeapon()
 {
     WeaponVFXComponent = CreateDefaultSubobject<USTUWeaponVFXComponent>("WeaponVFXComponent");
@@ -15,12 +17,14 @@ void ASTURifleWeapon::StartFire()
     Super::StartFire();
     GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &ThisClass::MakeShot, ShotInterval, true);
     MakeShot();
+    StartMuzzleVFX();
 }
 
 void ASTURifleWeapon::StopFire()
 {
     Super::StopFire();
     GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+    SetVisibilityMuzzleVFX(false);
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -64,4 +68,23 @@ void ASTURifleWeapon::MakeShot()
         DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), EndTraceLocation, FColor::Green, false, 2.0f);
     }
     DecreaseAmmo();
+}
+
+void ASTURifleWeapon::StartMuzzleVFX()
+{
+    if(!MuzzleVFXComponent)
+    {
+        MuzzleVFXComponent = SpawnMuzzleVFX();
+    }
+    SetVisibilityMuzzleVFX(true);
+}
+
+void ASTURifleWeapon::SetVisibilityMuzzleVFX(const bool Visible) const
+{
+    if(!MuzzleVFXComponent)
+    {
+        return;
+    }
+    MuzzleVFXComponent->SetPaused(!Visible);
+    MuzzleVFXComponent->SetVisibility(Visible);
 }

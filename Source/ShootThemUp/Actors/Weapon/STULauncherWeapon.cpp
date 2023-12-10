@@ -1,9 +1,6 @@
 #include "Actors/Weapon/STULauncherWeapon.h"
 
-#include <Kismet/GameplayStatics.h>
-
 #include "STUProjectile.h"
-
 
 void ASTULauncherWeapon::StartFire()
 {
@@ -22,10 +19,11 @@ void ASTULauncherWeapon::MakeShot()
     {
         return;
     }
-    FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
-    auto Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, MuzzleSocket);
+    const FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
+    const auto Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, MuzzleSocket);
     Projectile->SetDirection(MuzzleSocket.GetRotation().Vector());
     Projectile->SetOwner(GetOwner());
     Projectile->FinishSpawning(MuzzleSocket);
     DecreaseAmmo();
+    SpawnMuzzleVFX();
 }

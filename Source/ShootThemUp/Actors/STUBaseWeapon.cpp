@@ -1,7 +1,8 @@
 #include "Actors/STUBaseWeapon.h"
 
-#include <GameFramework/Character.h>
 #include <Logging/StructuredLog.h>
+
+#include "NiagaraFunctionLibrary.h"
 
 DEFINE_LOG_CATEGORY(Weapon);
 
@@ -97,6 +98,18 @@ void ASTUBaseWeapon::LogAmmoData() const
 bool ASTUBaseWeapon::IsFullAmmo() const
 {
     return CurrentAmmoData.Clips == DefaultAmmoData.Clips && CurrentAmmoData.Bullets == DefaultAmmoData.Bullets;
+}
+
+UNiagaraComponent* ASTUBaseWeapon::SpawnMuzzleVFX() const
+{
+    return UNiagaraFunctionLibrary::SpawnSystemAttached(//
+        MuzzleVFX,//
+        MeshComponent,//
+        "MuzzleFlashSocket",//
+        FVector::ZeroVector,//
+        FRotator::ZeroRotator,//
+        EAttachLocation::Type::SnapToTarget,//
+        true);
 }
 
 void ASTUBaseWeapon::StartFire() { }
