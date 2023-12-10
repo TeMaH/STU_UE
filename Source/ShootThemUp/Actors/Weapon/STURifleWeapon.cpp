@@ -6,6 +6,7 @@
 #include <Engine/DamageEvents.h>
 
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 ASTURifleWeapon::ASTURifleWeapon()
 {
@@ -50,6 +51,7 @@ void ASTURifleWeapon::MakeShot()
     FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
     const FVector Dir = FMath::VRandCone(CameraRotation.Vector(), FMath::DegreesToRadians(5.0f));
     FVector EndTraceLocation = CameraLocation + Dir * 1500.0f;
+    FVector TraceVFXEnd = EndTraceLocation;
     FHitResult HitResult;
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(GetOwner());
@@ -61,12 +63,10 @@ void ASTURifleWeapon::MakeShot()
         {
             Target->TakeDamage(AmountDamage, FDamageEvent(DamageClass), Controller, GetOwner());
         }
+        TraceVFXEnd = HitResult.ImpactPoint;
         WeaponVFXComponent->PlayVFX(HitResult);
     }
-    else
-    {
-        DrawDebugLine(GetWorld(), MuzzleSocket.GetLocation(), EndTraceLocation, FColor::Green, false, 2.0f);
-    }
+    SpawnTraceVFX(MuzzleSocket.GetLocation(), TraceVFXEnd);
     DecreaseAmmo();
 }
 
@@ -87,4 +87,12 @@ void ASTURifleWeapon::SetVisibilityMuzzleVFX(const bool Visible) const
     }
     MuzzleVFXComponent->SetPaused(!Visible);
     MuzzleVFXComponent->SetVisibility(Visible);
+}
+
+void ASTURifleWeapon::SpawnTraceVFX(const FVector& TraceStart, const FVector& TraceEnd) const
+{
+    if(const auto TraceVFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceVFX, TraceStart))
+    {
+        TraceVFXComponent->SetVariableVec3(TraceTargetName, TraceEnd);
+    }
 }

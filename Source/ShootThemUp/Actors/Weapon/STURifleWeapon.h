@@ -25,6 +25,7 @@ protected:
 
     void StartMuzzleVFX();
     void SetVisibilityMuzzleVFX(const bool Visible) const;
+    void SpawnTraceVFX(const FVector& TraceStart, const FVector& TraceEnd) const;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
@@ -36,8 +37,13 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire")
     float Dispersion = 1.5f;
 
-    TObjectPtr<UNiagaraComponent> MuzzleVFXComponent;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+    UNiagaraSystem* TraceVFX = nullptr;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+    FName TraceTargetName = "TraceTarget";
 
 protected:
-    FTimerHandle FireTimerHandle;
+    TObjectPtr<UNiagaraComponent> MuzzleVFXComponent;
+    FTimerHandle FireTimerHandle;    
 };
