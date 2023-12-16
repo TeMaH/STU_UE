@@ -26,6 +26,7 @@ protected:
     void StartMuzzleVFX();
     void SetVisibilityMuzzleVFX(const bool Visible) const;
     void SpawnTraceVFX(const FVector& TraceStart, const FVector& TraceEnd) const;
+    void GetViewPoint(OUT FVector& Location, OUT FRotator& Rotator) const;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")

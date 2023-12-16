@@ -7,6 +7,7 @@
 
 USTUFindTargetService::USTUFindTargetService()
 {
+    NodeName = "Find Target";
 }
 
 void USTUFindTargetService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)

@@ -40,14 +40,9 @@ void ASTURifleWeapon::MakeShot()
     {
         return;
     }
-    const auto Controller = Character->GetController<APlayerController>();
-    if (!Controller)
-    {
-        return;
-    }
     FVector CameraLocation;
     FRotator CameraRotation;
-    Controller->GetPlayerViewPoint(CameraLocation, CameraRotation);
+    GetViewPoint(CameraLocation, CameraRotation);
     FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
     const FVector Dir = FMath::VRandCone(CameraRotation.Vector(), FMath::DegreesToRadians(5.0f));
     FVector EndTraceLocation = CameraLocation + Dir * 1500.0f;
@@ -56,12 +51,12 @@ void ASTURifleWeapon::MakeShot()
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(GetOwner());
     Params.bReturnPhysicalMaterial = true;
-    GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
+    GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, EndTraceLocation, ECC_Visibility, Params);
     if (HitResult.bBlockingHit)
     {
         if (auto Target = Cast<ACharacter>(HitResult.GetActor()))
         {
-            Target->TakeDamage(AmountDamage, FDamageEvent(DamageClass), Controller, GetOwner());
+            Target->TakeDamage(AmountDamage, FDamageEvent(DamageClass), Character->GetController(), GetOwner());
         }
         TraceVFXEnd = HitResult.ImpactPoint;
         WeaponVFXComponent->PlayVFX(HitResult);
@@ -94,5 +89,20 @@ void ASTURifleWeapon::SpawnTraceVFX(const FVector& TraceStart, const FVector& Tr
     if(const auto TraceVFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceVFX, TraceStart))
     {
         TraceVFXComponent->SetVariableVec3(TraceTargetName, TraceEnd);
+    }
+}
+
+void ASTURifleWeapon::GetViewPoint(FVector& Location, FRotator& Rotator) const
+{
+    const auto Character = Cast<ACharacter>(GetOwner());
+    if (const auto Controller = Character->GetController<APlayerController>())
+    {
+        Controller->GetPlayerViewPoint(Location, Rotator);
+    }
+    else
+    {
+        const FTransform MuzzleSocket = MeshComponent->GetSocketTransform("MuzzleFlashSocket");
+        Location =  MuzzleSocket.GetTranslation();
+        Rotator = MuzzleSocket.GetRotation().Rotator();
     }
 }
