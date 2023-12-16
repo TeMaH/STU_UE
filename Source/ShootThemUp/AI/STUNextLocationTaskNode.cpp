@@ -33,10 +33,36 @@ EBTNodeResult::Type USTUNextLocationTaskNode::ExecuteTask(UBehaviorTreeComponent
         return EBTNodeResult::Failed;
     }
     FNavLocation NavLocation;
-    if(NavSystem->GetRandomReachablePointInRadius(Pawn->GetActorLocation(), Radius, NavLocation))
+    if(NavSystem->GetRandomReachablePointInRadius(GetCenter(OwnerComp), Radius, NavLocation))
     {
         BlackboardComponent->SetValueAsVector(AimLocationKey.SelectedKeyName, NavLocation.Location);
         return EBTNodeResult::Succeeded;
     }
     return EBTNodeResult::Failed;
+}
+
+FVector USTUNextLocationTaskNode::GetCenter(const UBehaviorTreeComponent& OwnerComp) const
+{
+    if(SelfCenter)
+    {
+        if (const auto Controller = OwnerComp.GetAIOwner())
+        {
+            if(const auto Pawn = Controller->GetPawn())
+            {
+                return Pawn->GetActorLocation();
+            }
+        }
+        return FVector::ZeroVector; 
+    }
+    const auto BlackboardComponent = OwnerComp.GetBlackboardComponent();
+    if (!BlackboardComponent)
+    {
+        return FVector::ZeroVector;
+    }
+    const auto CenterActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(CenterActorKey.SelectedKeyName));
+    if (!CenterActor)
+    {
+        return FVector::ZeroVector;
+    }
+    return CenterActor->GetActorLocation();
 }

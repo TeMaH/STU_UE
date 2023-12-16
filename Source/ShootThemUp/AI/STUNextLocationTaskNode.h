@@ -24,5 +24,14 @@ protected:
     float Radius = 1000.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool SelfCenter = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FBlackboardKeySelector AimLocationKey;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(EditCondition = "!SelfCenter"))
+    FBlackboardKeySelector CenterActorKey;
+
+private:
+    FVector GetCenter(const UBehaviorTreeComponent& OwnerComp) const;
 };
