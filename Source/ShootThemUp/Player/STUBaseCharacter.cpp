@@ -5,7 +5,6 @@
 #include <Components/TextRenderComponent.h>
 #include <Components/CapsuleComponent.h>
 #include <GameFramework/SpringArmComponent.h>
-#include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
 
 #include "Components/STUMovementComponent.h"
@@ -144,7 +143,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction(SprintName, IE_Released, this, &ASTUBaseCharacter::SprintEnded);
     PlayerInputComponent->BindAction(FireName, IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
     PlayerInputComponent->BindAction(FireName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
-    PlayerInputComponent->BindAction(ChangeWeaponeName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::EquipeNextWeapone);
+    PlayerInputComponent->BindAction(ChangeWeaponeName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::EquipNextWeapon);
     PlayerInputComponent->BindAction(ReloadWeaponeName, IE_Pressed, WeaponComponent, &USTUWeaponComponent::ReloadWeapon);
 }
 

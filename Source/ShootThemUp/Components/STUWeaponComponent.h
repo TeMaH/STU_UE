@@ -30,9 +30,9 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
 public:
     USTUWeaponComponent();
 
-    void StartFire();
+    virtual void StartFire();
     void StopFire();
-    void EquipeNextWeapone();
+    void EquipNextWeapon();
     void ReloadWeapon();
 
     bool TryGetWeaponUIData(FWeaponUIData& OutData) const;
@@ -43,12 +43,14 @@ public:
 
 protected:
     virtual void BeginPlay() override;
-    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-    void CreateWeapones();
+    void CreateWeapons();
+
+    void EquipWeapon(int32 WeaponIndex);
 
     void AttachToSocket(AActor* Target, USceneComponent* SocketComponent, FName SocketName);
-    void OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
+    void OnChangeWeaponNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
     void OnReloadFinishedNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
 
 protected:

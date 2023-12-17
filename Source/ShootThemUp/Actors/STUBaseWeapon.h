@@ -54,12 +54,13 @@ public:
     FWeaponUIData GetUIData() const;
     const FAmmoData& GetAmmoData() const;
     bool TryToAddClips(const float AmountClips);
+    bool IsAmmoEmpty() const;
 
 protected:
     virtual void BeginPlay() override;
 
     void DecreaseAmmo();
-    bool IsAmmoEmpty() const;
+    
     bool IsClipEmpty() const;
     void LogAmmoData() const;
     bool IsFullAmmo() const;

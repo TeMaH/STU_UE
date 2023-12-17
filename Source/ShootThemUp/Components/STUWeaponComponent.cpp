@@ -23,14 +23,14 @@ void USTUWeaponComponent::BeginPlay()
         CharacterMesh = CharacterOwner->GetMesh();
     }
     WeaponeIndex = 0;
-    CreateWeapones();
-    EquipeNextWeapone();
+    CreateWeapons();
+    EquipNextWeapon();
     
     if (USTUChangeWeapon_AnimNotify* ChangeWeaponNotify = FindNotifyByClass<USTUChangeWeapon_AnimNotify>(EquipMontage))
     {
-        ChangeWeaponNotify->OnAnimNotifyDelegate.AddUObject(this, &ThisClass::OnChangeWeaponeNotify);
+        ChangeWeaponNotify->OnAnimNotifyDelegate.AddUObject(this, &ThisClass::OnChangeWeaponNotify);
     }
-    for (auto WeaponData : WeaponesData)
+    for (const auto WeaponData : WeaponesData)
     {
         if (USTUReloadFinishedAnimNotify* ReloadWeaponNotify = FindNotifyByClass<USTUReloadFinishedAnimNotify>(WeaponData.ReloadAnimMontage))
         {
@@ -43,30 +43,39 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     StopFire();
     CurrentWeapone = nullptr;
-    for (auto Weapone : AllWeapones)
+    for (const auto WeaponItem : AllWeapones)
     {
-        Weapone->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-        Weapone->Destroy();
+        WeaponItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+        WeaponItem->Destroy();
     }
     AllWeapones.Empty();
     Super::EndPlay(EndPlayReason);
 }
 
-void USTUWeaponComponent::CreateWeapones()
+void USTUWeaponComponent::CreateWeapons()
 {
     const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
     for (auto WeaponData : WeaponesData)
     {
-        auto Weapone = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponData.Class);
-        if (!ensure(IsValid(Weapone)))
+        auto WeaponInstance = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponData.Class);
+        if (!ensure(IsValid(WeaponInstance)))
         {
             continue;
         }
-        AttachToSocket(Weapone, CharacterMesh.Get(), EquipmentSocketName);
-        Weapone->SetOwner(GetOwner());
-        Weapone->OnClipEmptyDelegate.AddUObject(this, &ThisClass::ReloadWeapon);
-        AllWeapones.Add(Weapone);
+        AttachToSocket(WeaponInstance, CharacterMesh.Get(), EquipmentSocketName);
+        WeaponInstance->SetOwner(GetOwner());
+        WeaponInstance->OnClipEmptyDelegate.AddUObject(this, &ThisClass::ReloadWeapon);
+        AllWeapones.Add(WeaponInstance);
     }
+}
+
+void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
+{
+    CurrentWeapone = AllWeapones[WeaponIndex];
+    AttachToSocket(CurrentWeapone, CharacterMesh.Get(), WeaponSocketName);
+    IsChangeWeaponInProgress = false;
+    const auto WeaponData = WeaponesData.FindByPredicate([&](const FWeaponData& Data) { return Data.Class == CurrentWeapone->GetClass(); });
+    ReloadCurrentWeaponMontage = WeaponData->ReloadAnimMontage;
 }
 
 void USTUWeaponComponent::StartFire()
@@ -87,7 +96,7 @@ void USTUWeaponComponent::StopFire()
     CurrentWeapone->StopFire();
 }
 
-void USTUWeaponComponent::EquipeNextWeapone()
+void USTUWeaponComponent::EquipNextWeapon()
 {
     if (IsChangeWeaponInProgress || IsReloadWeaponInProgress)
     {
@@ -130,7 +139,7 @@ const FAmmoData& USTUWeaponComponent::GetWeaponAmmoData() const
 
 bool USTUWeaponComponent::TryAddClips(TSubclassOf<ASTUBaseWeapon> WeaponClass, int32 Clips)
 {
-    for (auto WeaponItem : AllWeapones)
+    for (const auto WeaponItem : AllWeapones)
     {
         if (WeaponItem && WeaponItem->IsA(WeaponClass))
         {
@@ -142,11 +151,11 @@ bool USTUWeaponComponent::TryAddClips(TSubclassOf<ASTUBaseWeapon> WeaponClass, i
 
 void USTUWeaponComponent::AttachToSocket(AActor* InTarget, USceneComponent* InParent, FName InSocketName)
 {
-    FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+    const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
     InTarget->AttachToComponent(InParent, AttachmentRules, InSocketName);
 }
 
-void USTUWeaponComponent::OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+void USTUWeaponComponent::OnChangeWeaponNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
     if (MeshComp->GetOwner() != CharacterOwner)
     {
@@ -157,11 +166,7 @@ void USTUWeaponComponent::OnChangeWeaponeNotify(USkeletalMeshComponent* MeshComp
         AttachToSocket(CurrentWeapone, CharacterMesh.Get(), EquipmentSocketName);
     }
     WeaponeIndex = (WeaponeIndex + 1) % AllWeapones.Num();
-    CurrentWeapone = AllWeapones[WeaponeIndex];
-    AttachToSocket(CurrentWeapone, CharacterMesh.Get(), WeaponSocketName);
-    IsChangeWeaponInProgress = false;
-    auto WeaponData = WeaponesData.FindByPredicate([&](const FWeaponData& Data) { return Data.Class == CurrentWeapone->GetClass(); });
-    ReloadCurrentWeaponMontage = WeaponData->ReloadAnimMontage;
+    EquipWeapon(WeaponeIndex);
 }
 
 void USTUWeaponComponent::OnReloadFinishedNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
