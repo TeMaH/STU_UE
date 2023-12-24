@@ -92,7 +92,7 @@ protected:
     virtual void SprintEnded();
     virtual void Landed(const FHitResult& Hit);
 
-    void OnDeath();
+    virtual void OnDeath();
     void OnHealthChnaged(const float InHealth, const float InMaxHealth);
     void UpdateHealthText(const float InHealth);
 

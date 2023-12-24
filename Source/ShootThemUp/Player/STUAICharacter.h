@@ -18,5 +18,8 @@ public:
     ASTUAICharacter(const FObjectInitializer& ObjectInitializer);
 
     UPROPERTY(EditDefaultsOnly)
-    UBehaviorTree* BehaviorTreeAsset; 
+    UBehaviorTree* BehaviorTreeAsset;
+
+protected:
+    virtual void OnDeath() override;
 };
