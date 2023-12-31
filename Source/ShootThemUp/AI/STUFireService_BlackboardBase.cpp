@@ -17,7 +17,7 @@ void USTUFireService_BlackboardBase::TickNode(UBehaviorTreeComponent& OwnerComp,
     {
         if(const auto WeaponComponent = Controller->GetPawn()->GetComponentByClass<USTUWeaponComponent>())
         {
-            HasTarget ? WeaponComponent->StartFire() : WeaponComponent->StopFire();
+            //HasTarget ? WeaponComponent->StartFire() : WeaponComponent->StopFire();
         }
         
     }
