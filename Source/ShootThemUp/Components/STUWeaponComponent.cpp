@@ -22,7 +22,7 @@ void USTUWeaponComponent::BeginPlay()
     {
         CharacterMesh = CharacterOwner->GetMesh();
     }
-    WeaponeIndex = 0;
+    WeaponIndex = 0;
     CreateWeapons();
     EquipNextWeapon();
     
@@ -69,9 +69,9 @@ void USTUWeaponComponent::CreateWeapons()
     }
 }
 
-void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
+void USTUWeaponComponent::EquipWeapon(int32 InWeaponIndex)
 {
-    CurrentWeapone = AllWeapones[WeaponIndex];
+    CurrentWeapone = AllWeapones[InWeaponIndex];
     AttachToSocket(CurrentWeapone, CharacterMesh.Get(), WeaponSocketName);
     IsChangeWeaponInProgress = false;
     const auto WeaponData = WeaponesData.FindByPredicate([&](const FWeaponData& Data) { return Data.Class == CurrentWeapone->GetClass(); });
@@ -128,13 +128,27 @@ bool USTUWeaponComponent::TryGetWeaponUIData(FWeaponUIData& OutData) const
     return true;
 }
 
-const FAmmoData& USTUWeaponComponent::GetWeaponAmmoData() const
+const FAmmoData& USTUWeaponComponent::GetCurrentWeaponAmmoData() const
 {
     if (!CurrentWeapone)
     {
         return FAmmoData::Empty;
     }
     return CurrentWeapone->GetAmmoData();
+}
+
+const FAmmoData& USTUWeaponComponent::GetWeaponAmmoData(const TSubclassOf<ASTUBaseWeapon> InWeaponClass) const
+{
+    for (const auto WeaponItem : AllWeapones)
+    {
+        FString Msg = FString::Printf(TEXT("%s == %s"), *GetNameSafe(WeaponItem), *GetNameSafe(InWeaponClass));
+        UKismetSystemLibrary::PrintString(GetWorld(), Msg);
+        if(WeaponItem->IsA(InWeaponClass))
+        {
+            return WeaponItem->GetAmmoData();
+        }
+    }
+    return FAmmoData::Empty;
 }
 
 bool USTUWeaponComponent::TryAddClips(TSubclassOf<ASTUBaseWeapon> WeaponClass, int32 Clips)
@@ -165,8 +179,8 @@ void USTUWeaponComponent::OnChangeWeaponNotify(USkeletalMeshComponent* MeshComp,
     {
         AttachToSocket(CurrentWeapone, CharacterMesh.Get(), EquipmentSocketName);
     }
-    WeaponeIndex = (WeaponeIndex + 1) % AllWeapones.Num();
-    EquipWeapon(WeaponeIndex);
+    WeaponIndex = (WeaponIndex + 1) % AllWeapones.Num();
+    EquipWeapon(WeaponIndex);
 }
 
 void USTUWeaponComponent::OnReloadFinishedNotify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)

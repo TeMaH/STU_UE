@@ -56,7 +56,7 @@ FString USTUPlayerHUDWidget::GetAmmoData() const
     {
         return "";
     }
-    const FAmmoData& AmmoData = WeaponComponent->GetWeaponAmmoData();
+    const FAmmoData& AmmoData = WeaponComponent->GetCurrentWeaponAmmoData();
     if (AmmoData.Infinite)
     {
         return FString::Printf(TEXT("%i / ∞"), AmmoData.Bullets);

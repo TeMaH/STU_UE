@@ -15,5 +15,9 @@ class SHOOTTHEMUP_API USTUFireService_BlackboardBase : public UBTService_Blackbo
     GENERATED_UCLASS_BODY()
 
 protected:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool IsActive = true;
+
+protected:
     virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

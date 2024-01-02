@@ -37,7 +37,8 @@ public:
 
     bool TryGetWeaponUIData(FWeaponUIData& OutData) const;
 
-    const FAmmoData& GetWeaponAmmoData() const;
+    const FAmmoData& GetCurrentWeaponAmmoData() const;
+    const FAmmoData& GetWeaponAmmoData(const TSubclassOf<ASTUBaseWeapon> InWeaponClass) const;
 
     bool TryAddClips(TSubclassOf<ASTUBaseWeapon> WeaponClass, int32 Clips);
 
@@ -76,7 +77,7 @@ protected:
     UAnimMontage* ReloadCurrentWeaponMontage = nullptr;
 
 protected:
-    int32 WeaponeIndex = 0;
+    int32 WeaponIndex = 0;
     TWeakObjectPtr<USceneComponent> CharacterMesh = nullptr;
     TWeakObjectPtr<ACharacter> CharacterOwner = nullptr;
     bool IsChangeWeaponInProgress = false;
