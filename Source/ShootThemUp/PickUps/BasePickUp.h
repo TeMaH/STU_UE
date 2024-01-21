@@ -25,17 +25,22 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
+    bool IsActive() const;
+
 protected:
     UPROPERTY(VisibleAnywhere)
     USphereComponent* SphereComponent = nullptr;
 
     UPROPERTY(EditAnywhere)
-    float RespawnTime = 5.0f;
+    float RespawnTime = 5.0f;;
 
+protected:
+    FTimerHandle RespawnTimerHandler;
+    
  protected:
-    virtual bool GivePickeUpTo(ASTUBaseCharacter* Character);
+    virtual bool GivePickUpTo(ASTUBaseCharacter* Character);
 
 private:
     void MakePickUp();
-    void RespawwnPickUp();
+    void RespawnPickUp();
 };

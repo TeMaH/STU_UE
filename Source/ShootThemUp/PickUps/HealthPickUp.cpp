@@ -3,7 +3,7 @@
 #include "Components/STUHealthComponent.h"
 #include "Player/STUBaseCharacter.h"
 
-bool AHealthPickUp::GivePickeUpTo(ASTUBaseCharacter* Character)
+bool AHealthPickUp::GivePickUpTo(ASTUBaseCharacter* Character)
 {
     if (!Character)
     {

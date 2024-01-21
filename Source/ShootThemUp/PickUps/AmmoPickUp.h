@@ -15,7 +15,7 @@ class SHOOTTHEMUP_API AAmmoPickUp : public ABasePickUp
     GENERATED_BODY()
 
 protected:
-    virtual bool GivePickeUpTo(ASTUBaseCharacter* Character) override;
+    virtual bool GivePickUpTo(ASTUBaseCharacter* Character) override;
 
 protected:
     UPROPERTY(EditAnywhere)

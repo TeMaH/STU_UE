@@ -15,7 +15,7 @@ class SHOOTTHEMUP_API AHealthPickUp : public ABasePickUp
     GENERATED_BODY()
 
 protected:
-    virtual bool GivePickeUpTo(ASTUBaseCharacter* Character) override;
+    virtual bool GivePickUpTo(ASTUBaseCharacter* Character) override;
 
 protected:
     UPROPERTY(EditAnywhere, meta = (ClampMin = 1.0f, ClampMax = 100.0f))

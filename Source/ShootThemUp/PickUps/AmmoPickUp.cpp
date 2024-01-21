@@ -3,7 +3,7 @@
 #include "Components/STUWeaponComponent.h"
 #include "Player/STUBaseCharacter.h"
 
-bool AAmmoPickUp::GivePickeUpTo(ASTUBaseCharacter* Character)
+bool AAmmoPickUp::GivePickUpTo(ASTUBaseCharacter* Character)
 {
     if (!Character)
     {
