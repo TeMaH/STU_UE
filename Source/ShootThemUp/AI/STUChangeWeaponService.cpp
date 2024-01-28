@@ -16,8 +16,6 @@ USTUChangeWeaponService::USTUChangeWeaponService()
 void USTUChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
     const auto Value = FMath::RandRange(0.0f, 1.0f);
-    const FString Msg =FString::Printf(TEXT("%f"), Value);
-    UKismetSystemLibrary::PrintString(GetWorld(), Msg);
     if(Chance > Value)
     {
         if(const auto Controller = OwnerComp.GetAIOwner())

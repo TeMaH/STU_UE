@@ -141,8 +141,6 @@ const FAmmoData& USTUWeaponComponent::GetWeaponAmmoData(const TSubclassOf<ASTUBa
 {
     for (const auto WeaponItem : AllWeapones)
     {
-        FString Msg = FString::Printf(TEXT("%s == %s"), *GetNameSafe(WeaponItem), *GetNameSafe(InWeaponClass));
-        UKismetSystemLibrary::PrintString(GetWorld(), Msg);
         if(WeaponItem->IsA(InWeaponClass))
         {
             return WeaponItem->GetAmmoData();

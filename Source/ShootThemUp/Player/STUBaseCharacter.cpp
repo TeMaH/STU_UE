@@ -87,8 +87,6 @@ void ASTUBaseCharacter::Landed(const FHitResult& Hit)
     }
     const float FallDamage = FMath::GetMappedRangeValueClamped(FallVelocityRange, FallDamageRange, VeloctiyZ);
     UGameplayStatics::ApplyDamage(this, FallDamage, Controller, this, nullptr);
-    FString Msg = FString::Printf(TEXT("Velocity = %.1f Damage = %.1f"), VeloctiyZ, FallDamage);
-    UKismetSystemLibrary::PrintString(GetWorld(), Msg);
 }
 
 void ASTUBaseCharacter::OnDeath()

@@ -32,9 +32,6 @@ void USTUWeaponVFXComponent::PlayVFX(const FHitResult& HitResult)
         HitResult.ImpactPoint,
         HitResult.ImpactNormal.Rotation()))
     {
-        UKismetSystemLibrary::PrintString(GetWorld(), Decal->GetComponentRotation().ToString());
-        UKismetSystemLibrary::PrintString(GetWorld(), Decal->GetName());
-        UKismetSystemLibrary::PrintString(GetWorld(), Decal->GetComponentLocation().ToString());
         Decal->SetFadeOut(ImpactEffect.DecalData.LifeTime, ImpactEffect.DecalData.FadeOutTime);
     }
 }
