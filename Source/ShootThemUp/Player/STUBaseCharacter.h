@@ -80,6 +80,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
     FVector2D FallDamageRange = FVector2D(15.0f, 45.0f);
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+    FName MaterialColorName = "Paint Color";
+    
     bool IsSprint = false;
 
 protected:
@@ -110,4 +113,6 @@ public:
 
     UFUNCTION(BlueprintCallable)
     float GetRotation() const;
+
+    void SetTeamColor(const FLinearColor& Color);
 };

@@ -164,3 +164,14 @@ float ASTUBaseCharacter::GetRotation() const
     const float Angle = FMath::RadiansToDegrees(FMath::Acos(Dot));
     return Cross.Z < 0.0f ? -Angle : Angle;
 }
+
+void ASTUBaseCharacter::SetTeamColor(const FLinearColor& Color)
+{
+    if(!GetMesh())
+    {
+        return;
+    }
+
+    const auto MaterialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+    MaterialInstance->SetVectorParameterValue(MaterialColorName, Color);
+}
