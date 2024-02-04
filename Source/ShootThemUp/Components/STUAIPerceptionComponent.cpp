@@ -4,6 +4,7 @@
 #include "STUHealthComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Player/STUAICharacter.h"
+#include "Uitls/Utils.h"
 
 ACharacter* USTUAIPerceptionComponent::GetNearestCharacter() const
 {
@@ -30,7 +31,9 @@ ACharacter* USTUAIPerceptionComponent::GetNearestCharacter() const
     for(AActor* Enemy : Enemies)
     {
         const auto HealthComponent = Enemy->GetComponentByClass<USTUHealthComponent>();
-        if(HealthComponent && !HealthComponent->IsDeath())
+        const auto EnemyCharacter = CastChecked<ASTUBaseCharacter>(Enemy);
+        const bool AreEnemy = Utils::AreEnemy(Controller, EnemyCharacter->GetController());
+        if(HealthComponent && !HealthComponent->IsDeath() && AreEnemy)
         {
             const auto CurrentDistance = FVector::Dist(AICharacter->GetActorLocation(), Enemy->GetActorLocation());
             if(CurrentDistance < BestDistance)
